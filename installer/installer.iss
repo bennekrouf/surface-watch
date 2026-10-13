@@ -55,7 +55,8 @@ CloseApplications=yes
 SetupIconFile=..\assets\icon.ico
 UninstallDisplayIcon={app}\icon.ico
 #endif
-; LicenseFile=..\LICENSE   ; enable once the project has a LICENSE file
+; Shows the licence (PolyForm Noncommercial) as a page the user accepts before installing.
+LicenseFile=..\LICENSE
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"

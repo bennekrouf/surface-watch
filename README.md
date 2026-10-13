@@ -94,3 +94,10 @@ src/          Dioxus desktop app (screens, components)
 
 `crates/core/tests/juice_shop.rs` pins the diff against real REA captures of
 OWASP Juice Shop v19.0.0 and v20.3.0.
+
+## Licence
+
+[PolyForm Noncommercial 1.0.0](LICENSE): free for personal use, research and
+non-profit organisations. Commercial use, including a consultant using it on
+client work, needs a commercial licence: <https://mayorana.ch/en/contact>.
+The name and icons are covered by [TRADEMARK.md](TRADEMARK.md).
