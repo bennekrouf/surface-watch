@@ -1,0 +1,91 @@
+# Changelog
+
+What changed in each release of **Surface Watch**, the client-side attack
+surface monitor for web pentest engagements, and of its command-line edition,
+`surfacewatch`.
+
+Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Added
+
+- Downloads for macOS (Apple Silicon, signed and notarized), Windows
+  (installer) and Linux (x86_64 tarball with a setup script), plus the
+  `surfacewatch` command line for each.
+- When a newer version is out, a banner at the top of the window says so,
+  with a **Download** button for your system and the published SHA-256 so you
+  can check the file. Set `DISABLE_UPDATE_CHECK` to turn the check off.
+- The version you are running is shown next to the app's name, top left.
+- First version. `surfacewatch` captures a web target through REA, crawling
+  its pages in small batches, and shows its attack surface: endpoints with
+  their parameters, statuses and security headers, plus the third parties the
+  page talks to.
+- `surfacewatch diff` compares two captures and lists what actually changed:
+  new and removed endpoints, changed parameters, statuses and headers, and
+  third-party origins. Renamed script chunks, images and timing differences no
+  longer show up as changes. Give it a second capture of the same build with
+  `--repeat` and endpoints that come and go between runs are set aside and
+  listed as unstable.
+- The **Watch** tab captures the selected target with **Capture now** and
+  compares any two of its captures, by default the first one (the baseline)
+  against the latest. Changes are grouped by kind, each with what it means for
+  your testing: new endpoints to test, removed ones to check directly, new
+  parameters to try for injection. **Stability check** captures the target a
+  second time so endpoints that come and go between runs are set aside instead
+  of showing up as changes. Captures are refused outside the engagement's test
+  window.
+- The **Surface** tab shows what a capture saw of a target: every endpoint
+  with its statuses and parameters, the scripts, and the third parties the
+  page loads from. Entries worth a look are flagged and listed first: server
+  errors, admin or debug paths that answer without a login, object IDs in the
+  path to test for access control, and pages served without a
+  Content-Security-Policy. Filter by path or show flagged entries only, and
+  pick an older capture to see what it held. **Promote** turns any entry into
+  a finding with a retest check, so issues that were there from the start no
+  longer need a change to be recorded.
+- **New engagement** in the sidebar opens a form for the client, the test
+  window, who authorised the test, and the first target: its origin, the
+  pages to visit, and crawl settings. **+ Add target** adds more targets to an
+  engagement. The origin is checked as you type and shows exactly what is in
+  scope; paths go in the pages list. An authorisation note is required, and
+  the same rules apply to `surfacewatch engagement add`, which now needs
+  `--auth`.
+- The **Captures** tab lists every capture of a target, newest first: when
+  it was taken, whether it is a crawl, a stability repeat or a HAR import,
+  how many endpoints and flagged entries it holds, the tools and versions
+  behind it, its evidence, and which findings rely on it. **Delete** removes
+  a capture and its stability repeats after you confirm, and says which
+  findings will lose the raw data behind their evidence.
+- **Import HAR** in the Watch tab, or `surfacewatch import-har`, adds a
+  recording from your browser's DevTools, Caido, ZAP or mitmproxy as a
+  capture. It covers what the crawl cannot reach: logged-in pages, forms, a
+  chat message sent. Cookies, header values, request and response bodies and
+  query values are not kept; the capture cites the original file by its
+  SHA-256, and the file stays where it is. The capture is dated by when it was
+  recorded.
+- Comparisons stay crawl against crawl by default. Pick a HAR to compare it,
+  and a note warns that a HAR and a crawl cover different ground. Retests use
+  the newest capture of each kind that covers the finding, so a HAR of one
+  flow does not turn a finding into "unknown".
+- **Promote to finding** on each change in the Watch tab turns it into a
+  finding that cites the REA evidence of both captures.
+- The **Findings** tab lists an engagement's findings by severity. Edit the
+  title, severity, description, remediation and CVSS vector in place; every
+  change is saved as you go. **Retest** checks a finding against the target's
+  latest capture and records the result with what the capture showed: fixed,
+  still present, or unknown when the crawl did not reach it. An endpoint the
+  crawl no longer sees is never reported as fixed, because it may still answer
+  on the server. Findings no capture can confirm get their status set by hand.
+- **Export Markdown** writes a report of the engagement's findings, with their
+  evidence, the tool versions behind each capture, and the retest history.
+  `surfacewatch findings <engagement> --retest --export` does the same from
+  the terminal or a scheduled job.
+- `surfacewatch engagement add`, `target add`, `import` and `watch` create
+  engagements and targets, bring in existing REA captures, and capture a
+  target and compare it with its baseline from the terminal or a scheduled
+  job.
+- The Readiness tab checks Node.js, REA and your browser, and lists the known
+  REA issues with the workaround applied for each. The app opens on it until
+  you have a target to watch.

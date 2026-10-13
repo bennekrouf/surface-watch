@@ -1,0 +1,28 @@
+[workspace]
+members = ["crates/core", "crates/cli"]
+
+# Workspace-wide version: every crate (root + cli + core) inherits via
+# `version.workspace = true`, so the window title, CLI `--version` and crate
+# manifests stay in sync from this one line.
+[workspace.package]
+version = "0.1.0"
+
+[package]
+name = "surface-watch"
+version.workspace = true
+edition = "2021"
+description = "Client-side attack surface monitor for web pentest engagements, built on REA captures"
+
+[dependencies]
+dioxus = { version = "0.6", features = ["desktop"] }
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+dirs = "5"
+chrono = "0.4"
+rfd = "0.15"
+reqwest = "0.12"
+surface-watch-core = { path = "crates/core" }
+
+[target.'cfg(windows)'.build-dependencies]
+winresource = "0.1"

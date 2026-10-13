@@ -1,0 +1,12 @@
+[application]
+name = "surface-watch"
+default_platform = "desktop"
+
+[desktop]
+title = "Surface Watch"
+
+[bundle]
+identifier = "ch.mayorana.surface-watch"
+
+[web.app]
+title = "Surface Watch"
