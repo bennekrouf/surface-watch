@@ -1,0 +1,8 @@
+# The compiler every build uses: local, CI and release. CI used to take the
+# latest stable, so a new clippy lint could fail a pull request that passed
+# locally. Bump this deliberately, together with the toolchain lines in
+# .github/workflows/, and fix what the new version flags in the same change.
+[toolchain]
+channel = "1.99"
+components = ["rustfmt", "clippy"]
+profile = "minimal"
