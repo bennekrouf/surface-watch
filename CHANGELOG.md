@@ -18,6 +18,10 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   with a **Download** button for your system and the published SHA-256 so you
   can check the file. Set `DISABLE_UPDATE_CHECK` to turn the check off.
 - The version you are running is shown next to the app's name, top left.
+- Surface Watch is free for personal, research and non-profit use under the
+  PolyForm Noncommercial licence; commercial use, including client work,
+  needs a licence from Mayorana. The Windows installer shows the licence
+  before installing.
 - First version. `surfacewatch` captures a web target through REA, crawling
   its pages in small batches, and shows its attack surface: endpoints with
   their parameters, statuses and security headers, plus the third parties the

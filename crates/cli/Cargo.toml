@@ -2,6 +2,7 @@
 name = "surface-watch-cli"
 version.workspace = true
 edition = "2021"
+license-file = "../../LICENSE"
 description = "Headless Surface Watch: readiness, capture and diff from the terminal, cron or CI"
 default-run = "surfacewatch"
 

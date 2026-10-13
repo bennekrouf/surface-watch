@@ -2,6 +2,7 @@
 name = "surface-watch-core"
 version.workspace = true
 edition = "2021"
+license-file = "../../LICENSE"
 description = "Shared services (REA runner, surface model, diff engine, store) for Surface Watch frontends"
 
 [dependencies]

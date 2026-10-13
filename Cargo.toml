@@ -11,6 +11,7 @@ version = "0.1.0"
 name = "surface-watch"
 version.workspace = true
 edition = "2021"
+license-file = "LICENSE"
 description = "Client-side attack surface monitor for web pentest engagements, built on REA captures"
 
 [dependencies]
