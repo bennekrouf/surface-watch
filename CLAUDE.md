@@ -26,6 +26,10 @@ names. Never write a version heading yourself.
 
 ## Checks
 
+Do not run `dx fmt`: it has dropped `else` branches from `if … else` inside
+`rsx!`. `cargo fmt` leaves `rsx!` alone; format markup by hand.
+
+
 The compiler is pinned in `rust-toolchain.toml` (rustup installs it on first
 use) and in the workflows' `dtolnay/rust-toolchain@<version>` lines: bump both
 together.
