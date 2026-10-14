@@ -134,7 +134,12 @@ pub fn MainScreen() -> Element {
                                     Some((e, t)) => {
                                         let key = format!("{}/{}", e.id, t.id);
                                         rsx! {
-                                            WatchPanel { key: "{key}", engagement: e, target: t }
+                                            WatchPanel {
+                                                key: "{key}",
+                                                engagement: e,
+                                                target: t,
+                                                on_changed: move |_| engagements.set(store::load_engagements()),
+                                            }
                                         }
                                     }
                                     None => rsx! {

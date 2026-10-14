@@ -1,0 +1,195 @@
+{
+"_note": "Routes from REA main (88afcc7) analyze-web-bundle on OWASP Juice Shop v20.3.0, trimmed to the routes section.",
+"observations": {
+"routes": [
+{
+"value": "/",
+"mechanism": "property:path"
+},
+{
+"value": "/engine.io",
+"mechanism": "property:path"
+},
+{
+"value": "administration",
+"mechanism": "property:path"
+},
+{
+"value": "accounting",
+"mechanism": "property:path"
+},
+{
+"value": "about",
+"mechanism": "property:path"
+},
+{
+"value": "address/select",
+"mechanism": "property:path"
+},
+{
+"value": "address/saved",
+"mechanism": "property:path"
+},
+{
+"value": "address/create",
+"mechanism": "property:path"
+},
+{
+"value": "address/edit/:addressId",
+"mechanism": "property:path"
+},
+{
+"value": "delivery-method",
+"mechanism": "property:path"
+},
+{
+"value": "deluxe-membership",
+"mechanism": "property:path"
+},
+{
+"value": "saved-payment-methods",
+"mechanism": "property:path"
+},
+{
+"value": "basket",
+"mechanism": "property:path"
+},
+{
+"value": "order-completion/:id",
+"mechanism": "property:path"
+},
+{
+"value": "contact",
+"mechanism": "property:path"
+},
+{
+"value": "photo-wall",
+"mechanism": "property:path"
+},
+{
+"value": "complain",
+"mechanism": "property:path"
+},
+{
+"value": "order-summary",
+"mechanism": "property:path"
+},
+{
+"value": "order-history",
+"mechanism": "property:path"
+},
+{
+"value": "payment/:entity",
+"mechanism": "property:path"
+},
+{
+"value": "wallet",
+"mechanism": "property:path"
+},
+{
+"value": "login",
+"mechanism": "property:path"
+},
+{
+"value": "forgot-password",
+"mechanism": "property:path"
+},
+{
+"value": "recycle",
+"mechanism": "property:path"
+},
+{
+"value": "register",
+"mechanism": "property:path"
+},
+{
+"value": "search",
+"mechanism": "property:path"
+},
+{
+"value": "hacking-instructor",
+"mechanism": "property:path"
+},
+{
+"value": "score-board",
+"mechanism": "property:path"
+},
+{
+"value": "track-result",
+"mechanism": "property:path"
+},
+{
+"value": "track-result/new",
+"mechanism": "property:path"
+},
+{
+"value": "2fa/enter",
+"mechanism": "property:path"
+},
+{
+"value": "privacy-security",
+"mechanism": "property:path"
+},
+{
+"value": "privacy-policy",
+"mechanism": "property:path"
+},
+{
+"value": "change-password",
+"mechanism": "property:path"
+},
+{
+"value": "two-factor-authentication",
+"mechanism": "property:path"
+},
+{
+"value": "data-export",
+"mechanism": "property:path"
+},
+{
+"value": "last-login-ip",
+"mechanism": "property:path"
+},
+{
+"value": "juicy-nft",
+"mechanism": "property:path"
+},
+{
+"value": "wallet-web3",
+"mechanism": "property:path"
+},
+{
+"value": "web3-sandbox",
+"mechanism": "property:path"
+},
+{
+"value": "chatbot",
+"mechanism": "property:path"
+},
+{
+"value": "",
+"mechanism": "property:path"
+},
+{
+"value": "conversation/:id",
+"mechanism": "property:path"
+},
+{
+"value": "bee-haven",
+"mechanism": "property:path"
+},
+{
+"value": "coding-challenge/:challengeKey",
+"mechanism": "property:path"
+},
+{
+"value": "403",
+"mechanism": "property:path"
+},
+{
+"value": "**",
+"mechanism": "property:path"
+}
+]
+}
+}

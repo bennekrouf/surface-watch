@@ -10,7 +10,7 @@ use std::process::ExitCode;
 use surface_watch_core::{
     capture,
     diff::{self, SurfaceDiff},
-    findings,
+    discover, findings,
     model::{CaptureProfile, Engagement},
     rea, readiness, setup, store,
     surface::Surface,
@@ -32,6 +32,7 @@ USAGE:
   surfacewatch import-har <engagement> <target> <file.har>
   surfacewatch watch <engagement> <target> [--twice]
   surfacewatch findings <engagement> [--retest] [--export]
+  surfacewatch suggest-pages <engagement> <target> [--add]
 
 A capture directory holds one REA browser-scenario output per batch (*.json).
 --repeat names a second capture of the after build; endpoints that differ
@@ -57,6 +58,9 @@ fn main() -> ExitCode {
             cmd_target_add(&args[2], &args[3], &args[4], &args[5..])
         }
         Some("import") if args.len() >= 4 => cmd_import(&args[1..]),
+        Some("suggest-pages") if args.len() >= 3 => {
+            cmd_suggest_pages(&args[1], &args[2], args.iter().any(|a| a == "--add"))
+        }
         Some("import-har") if args.len() == 4 => {
             cmd_import_har(&args[1], &args[2], Path::new(&args[3]))
         }
@@ -379,6 +383,49 @@ fn cmd_findings(engagement: &str, retest: bool, export: bool) -> Result<(), Stri
         println!(
             "exported {}",
             findings::export_markdown(&e, &captures)?.display()
+        );
+    }
+    Ok(())
+}
+
+fn cmd_suggest_pages(engagement: &str, target: &str, add: bool) -> Result<(), String> {
+    let e = find_engagement(engagement)?;
+    let t = e
+        .targets
+        .iter()
+        .find(|t| t.id == target)
+        .ok_or_else(|| format!("no target {target:?} in {engagement}"))?;
+    println!("Opening {} and reading its code…", t.origin);
+    let scan = discover::scan(&e, t)?;
+    println!(
+        "{} routes found in the code (REA evidence {}, saved to {})",
+        scan.routes_found,
+        scan.evidence_id.as_deref().unwrap_or("?"),
+        scan.evidence_file.display()
+    );
+    let new: Vec<String> = scan
+        .suggestions
+        .iter()
+        .filter(|s| !s.already_listed && !s.needs_value)
+        .map(|s| s.page.clone())
+        .collect();
+    for s in &scan.suggestions {
+        let tag = if s.already_listed {
+            "listed"
+        } else if s.needs_value {
+            "needs a value"
+        } else {
+            "new"
+        };
+        println!("  {:<14} {}", tag, s.page);
+    }
+    if add && !new.is_empty() {
+        let n = setup::add_pages(&e.id, &t.id, &new)?;
+        println!("Added {n} page(s) to the crawl of {}.", t.label);
+    } else if !new.is_empty() {
+        println!(
+            "Run again with --add to add the {} new page(s) to the crawl.",
+            new.len()
         );
     }
     Ok(())

@@ -247,6 +247,33 @@ pub fn add_target(engagement_id: &str, draft: &TargetDraft) -> Result<Target, St
     })
 }
 
+/// Adds `pages` to a target's crawl list, skipping any already there.
+/// Returns how many were added.
+pub fn add_pages(engagement_id: &str, target_id: &str, pages: &[String]) -> Result<usize, String> {
+    store::with_lock(|| {
+        let mut e = store::load_engagements()
+            .into_iter()
+            .find(|e| e.id == engagement_id)
+            .ok_or_else(|| format!("No engagement {engagement_id:?}."))?;
+        let t = e
+            .targets
+            .iter_mut()
+            .find(|t| t.id == target_id)
+            .ok_or_else(|| format!("No target {target_id:?}."))?;
+        let mut added = 0;
+        for p in pages {
+            if !t.profile.pages.contains(p) {
+                t.profile.pages.push(p.clone());
+                added += 1;
+            }
+        }
+        let json = serde_json::to_string_pretty(&e).map_err(|err| err.to_string())?;
+        store::write_locked(&store::engagement_dir(&e.id).join("engagement.json"), &json)
+            .map_err(|err| format!("Could not save: {err}"))?;
+        Ok(added)
+    })
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

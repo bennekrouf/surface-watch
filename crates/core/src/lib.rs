@@ -17,10 +17,12 @@
 //! * [`model`] holds the engagement records the app persists via [`store`];
 //!   [`setup`] validates and creates them.
 //! * [`watch`] stores captures per target and compares any two of them.
+//! * [`discover`] suggests pages to crawl from routes declared in the code.
 //! * [`findings`] promotes diff items to findings, retests and exports them.
 
 pub mod capture;
 pub mod diff;
+pub mod discover;
 pub mod env;
 pub mod findings;
 pub mod flags;

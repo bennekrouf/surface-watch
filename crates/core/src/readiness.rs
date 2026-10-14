@@ -42,8 +42,12 @@ pub const KNOWN_ISSUES: &[(&str, &str)] = &[
         "Crawls are split into batches (6 pages by default).",
     ),
     (
-        "Static route and endpoint extraction misses backtick strings",
-        "Static JS analysis is not used as a source yet.",
+        "REA 6.4.0 misses routes written as template literals (fixed upstream in morluto/rea#2805, unreleased)",
+        "Suggest pages works with any REA but finds few routes until the fix ships; set SURFACE_WATCH_REA to try a newer build.",
+    ),
+    (
+        "REA's static endpoint candidates are low-confidence guesses",
+        "Only routes are used from the code; endpoints come from crawls and HAR imports.",
     ),
     (
         "compare-web-captures rejects REA's own output file",

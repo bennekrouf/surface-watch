@@ -5,5 +5,6 @@ pub mod findings_panel;
 pub mod os;
 pub mod placeholder_panel;
 pub mod readiness_panel;
+pub mod suggest_panel;
 pub mod surface_panel;
 pub mod watch_panel;
