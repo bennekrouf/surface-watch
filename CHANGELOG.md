@@ -7,6 +7,18 @@ surface monitor for web pentest engagements, and of its command-line edition,
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **Suggest pages** in the Watch tab finds the pages a target's own code
+  declares, including hidden ones no link points to, such as an admin or
+  accounting area. It opens the target once in a background browser, lists
+  what it found, and adds the pages you tick to the crawl. Pages that need a
+  value, like an order ID, are flagged instead of added. Also available as
+  `surfacewatch suggest-pages`. With REA 6.4.0 it finds only a few routes;
+  the next REA release finds them all.
+
 ## [0.1.1] - 2026-10-13
 
 ### Added

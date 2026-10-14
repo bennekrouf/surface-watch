@@ -20,8 +20,19 @@ pub struct Rea {
 }
 
 impl Rea {
-    /// `rea` from PATH if present, else a pinned `npx` invocation.
+    /// `SURFACE_WATCH_REA` if set (e.g. `node /path/to/rea/scripts/rea.mjs`,
+    /// to try an unreleased REA), else `rea` from PATH, else a pinned `npx`
+    /// invocation.
     pub fn detect() -> Self {
+        if let Ok(custom) = std::env::var("SURFACE_WATCH_REA") {
+            let mut parts = custom.split_whitespace().map(str::to_string);
+            if let Some(program) = parts.next() {
+                return Rea {
+                    program,
+                    prefix: parts.collect(),
+                };
+            }
+        }
         if on_path("rea") {
             Rea {
                 program: "rea".into(),
@@ -58,6 +69,40 @@ impl Rea {
             return Err(String::from_utf8_lossy(&out.stderr).trim().to_string());
         }
         Ok(String::from_utf8_lossy(&out.stdout).trim().to_string())
+    }
+
+    /// Runs an REA command with `--format json` and returns its output
+    /// unchanged, or REA's own error message.
+    fn run_json(&self, args: &[&str]) -> Result<String, String> {
+        let out = self
+            .command()
+            .args(args)
+            .args(["--format", "json"])
+            .output()
+            .map_err(|e| format!("could not run {}: {e}", self.describe()))?;
+        let stdout = String::from_utf8_lossy(&out.stdout).to_string();
+        if out.status.success() {
+            return Ok(stdout);
+        }
+        Err(rea_error_message(&stdout)
+            .unwrap_or_else(|| String::from_utf8_lossy(&out.stderr).trim().to_string()))
+    }
+
+    /// Page targets of a browser exposing CDP at `endpoint`.
+    pub fn list_browser_targets(&self, endpoint: &str) -> Result<String, String> {
+        self.run_json(&["list-browser-targets", endpoint])
+    }
+
+    /// Static analysis of the scripts a page loaded: routes, chunks, and
+    /// endpoint candidates.
+    pub fn analyze_web_bundle(&self, endpoint: &str, target_id: &str) -> Result<String, String> {
+        self.run_json(&[
+            "analyze-web-bundle",
+            endpoint,
+            target_id,
+            "--observation-ms",
+            "3000",
+        ])
     }
 
     /// Runs one browser scenario and returns REA's JSON output unchanged, so

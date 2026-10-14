@@ -1,3 +1,4 @@
+use crate::components::suggest_panel::SuggestPanel;
 use chrono::{Local, Utc};
 use dioxus::prelude::*;
 use surface_watch_core::{
@@ -20,13 +21,19 @@ enum Run {
 /// Mounted with a key per target, so switching targets starts from fresh
 /// state instead of carrying one target's selection into another.
 #[component]
-pub fn WatchPanel(engagement: Engagement, target: Target) -> Element {
+pub fn WatchPanel(
+    engagement: Engagement,
+    target: Target,
+    /// The target's settings changed (pages added): reload engagements.
+    on_changed: EventHandler<()>,
+) -> Element {
     let dir = watch::target_dir(&engagement.id, &target.id);
     let mut refresh = use_signal(|| 0u32);
     let mut before = use_signal(|| Option::<String>::None);
     let mut after = use_signal(|| Option::<String>::None);
     let mut run = use_signal(|| Run::Idle);
     let mut twice = use_signal(|| true);
+    let mut suggesting = use_signal(|| false);
     let mut findings_rev = use_signal(|| 0u32);
     let mut promote_msg = use_signal(|| Option::<Result<String, String>>::None);
 
@@ -220,7 +227,9 @@ pub fn WatchPanel(engagement: Engagement, target: Target) -> Element {
                 div { class: "titles",
                     h2 { class: "mono", "{target.label}" }
                     div { class: "row",
-                        span { class: "muted", "{engagement.client} · {engagement.name} · {target.profile.pages.len()} pages in {batches} batches" }
+                        span { class: "muted",
+                            "{engagement.client} · {engagement.name} · {target.profile.pages.len()} pages in {batches} batches"
+                        }
                         if window_open {
                             span { class: "pill ok", "test window open" }
                         } else {
@@ -229,6 +238,13 @@ pub fn WatchPanel(engagement: Engagement, target: Target) -> Element {
                     }
                 }
                 div { class: "row",
+                    button {
+                        class: "btn",
+                        disabled: running || suggesting() || !window_open,
+                        title: "Find pages declared in the target's code, including ones no link points to",
+                        onclick: move |_| suggesting.set(true),
+                        "Suggest pages"
+                    }
                     button {
                         class: "btn",
                         disabled: running,
@@ -251,13 +267,39 @@ pub fn WatchPanel(engagement: Engagement, target: Target) -> Element {
                         disabled: running || !window_open,
                         title: if window_open { "" } else { "Captures are refused outside the engagement's test window" },
                         onclick: start_capture,
-                        if running { "Capturing…" } else { "Capture now" }
+                        if running {
+                            "Capturing…"
+                        } else {
+                            "Capture now"
+                        }
                     }
                 }
             }
 
+            if suggesting() {
+                SuggestPanel {
+                    engagement: engagement.clone(),
+                    target: target.clone(),
+                    on_close: move |_| suggesting.set(false),
+                    on_added: move |n: usize| {
+                        suggesting.set(false);
+                        run.set(
+                            Run::Done(
+                                format!(
+                                    "Added {n} page{} to the crawl. The next capture visits them.",
+                                    if n == 1 { "" } else { "s" },
+                                ),
+                            ),
+                        );
+                        on_changed.call(());
+                    },
+                }
+            }
+
             match run() {
-                Run::Running(msg) | Run::Done(msg) => rsx! { div { class: "notice", "{msg}" } },
+                Run::Running(msg) | Run::Done(msg) => rsx! {
+                    div { class: "notice", "{msg}" }
+                },
                 Run::Failed(err) => rsx! {
                     div { class: "notice bad-notice",
                         strong { "That did not work. " }
@@ -272,7 +314,9 @@ pub fn WatchPanel(engagement: Engagement, target: Target) -> Element {
             } else if primary.is_empty() {
                 div { class: "placeholder",
                     p { "No captures yet." }
-                    p { class: "muted", "Capture now to take the baseline. Every later capture is compared with it." }
+                    p { class: "muted",
+                        "Capture now to take the baseline. Every later capture is compared with it."
+                    }
                 }
             } else {
                 div { class: "pickers",
@@ -292,7 +336,9 @@ pub fn WatchPanel(engagement: Engagement, target: Target) -> Element {
                         on_pick: move |id| after.set(Some(id)),
                     }
                     div { class: "muted small",
-                        if sel_before.as_deref().is_some_and(has_repeat) || sel_after.as_deref().is_some_and(has_repeat) {
+                        if sel_before.as_deref().is_some_and(has_repeat)
+                            || sel_after.as_deref().is_some_and(has_repeat)
+                        {
                             "Stability check available: unstable endpoints are set aside."
                         } else {
                             "No stability check for these captures: timer-driven calls may show as changes."
@@ -310,19 +356,31 @@ pub fn WatchPanel(engagement: Engagement, target: Target) -> Element {
                 if primary.len() == 1 {
                     div { class: "placeholder",
                         p { "Baseline taken." }
-                        p { class: "muted", "Capture again after the next deployment to see what changed." }
+                        p { class: "muted",
+                            "Capture again after the next deployment to see what changed."
+                        }
                     }
                 } else if sel_before == sel_after {
-                    p { class: "muted", "Before and after are the same capture. Pick two different captures to compare." }
+                    p { class: "muted",
+                        "Before and after are the same capture. Pick two different captures to compare."
+                    }
                 } else {
                     match &*diff.read() {
-                        None | Some(None) => rsx! { p { class: "muted", "Comparing…" } },
-                        Some(Some(Err(e))) => rsx! { div { class: "notice bad-notice", "Could not compare these captures: {e}" } },
+                        None | Some(None) => rsx! {
+                            p { class: "muted", "Comparing…" }
+                        },
+                        Some(Some(Err(e))) => rsx! {
+                            div { class: "notice bad-notice", "Could not compare these captures: {e}" }
+                        },
                         Some(Some(Ok(d))) => rsx! {
                             if let Some(msg) = promote_msg() {
                                 match msg {
-                                    Ok(m) => rsx! { div { class: "notice", "{m}" } },
-                                    Err(e) => rsx! { div { class: "notice bad-notice", "Could not save the finding: {e}" } },
+                                    Ok(m) => rsx! {
+                                        div { class: "notice", "{m}" }
+                                    },
+                                    Err(e) => rsx! {
+                                        div { class: "notice bad-notice", "Could not save the finding: {e}" }
+                                    },
                                 }
                             }
                             DiffView {
@@ -351,9 +409,7 @@ fn CapturePicker(
     rsx! {
         label { class: "picker", r#for: "{id}",
             span { class: "k", "{label}" }
-            select {
-                id: "{id}",
-                onchange: move |e| on_pick.call(e.value()),
+            select { id: "{id}", onchange: move |e| on_pick.call(e.value()),
                 for c in captures.iter().rev() {
                     option {
                         value: "{c.id}",
@@ -397,17 +453,24 @@ fn DiffView(
         div { class: "diff",
             div { class: "summary",
                 span { class: "big", "{significant.len()}" }
-                span { " change{plural(significant.len())} · API endpoints {diff.endpoints_before} → {diff.endpoints_after}" }
+                span {
+                    " change{plural(significant.len())} · API endpoints {diff.endpoints_before} → {diff.endpoints_after}"
+                }
             }
             if significant.is_empty() {
                 div { class: "nochange",
                     span { class: "pill ok", "no attack-surface change" }
-                    span { class: "muted", "Same endpoints, parameters, statuses, security headers and third-party origins." }
+                    span { class: "muted",
+                        "Same endpoints, parameters, statuses, security headers and third-party origins."
+                    }
                 }
             }
             for kind in kinds {
                 {
-                    let items: Vec<&Change> = significant.iter().filter(|c| c.kind == kind).collect();
+                    let items: Vec<&Change> = significant
+                        .iter()
+                        .filter(|c| c.kind == kind)
+                        .collect();
                     rsx! {
                         div { class: "diffgrp", key: "{kind.label()}",
                             div { class: "gh",
@@ -429,7 +492,11 @@ fn DiffView(
                                                 class: "btn",
                                                 disabled: done,
                                                 onclick: move |_| on_promote.call(change.clone()),
-                                                if done { "Promoted" } else { "Promote to finding" }
+                                                if done {
+                                                    "Promoted"
+                                                } else {
+                                                    "Promote to finding"
+                                                }
                                             }
                                         }
                                     }
@@ -450,10 +517,16 @@ fn DiffView(
             }
             for c in info.iter() {
                 details { class: "info", key: "{c.subject}",
-                    summary { "Scripts changed: {c.added.len()} added, {c.removed.len()} removed (build hashes ignored)" }
+                    summary {
+                        "Scripts changed: {c.added.len()} added, {c.removed.len()} removed (build hashes ignored)"
+                    }
                     div { class: "mono small",
-                        for s in c.added.iter() { div { key: "+{s}", "+ {s}" } }
-                        for s in c.removed.iter() { div { key: "-{s}", "− {s}" } }
+                        for s in c.added.iter() {
+                            div { key: "+{s}", "+ {s}" }
+                        }
+                        for s in c.removed.iter() {
+                            div { key: "-{s}", "− {s}" }
+                        }
                     }
                 }
             }
