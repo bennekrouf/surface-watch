@@ -292,7 +292,7 @@ pub fn WatchPanel(engagement: Engagement, target: Target) -> Element {
                         on_pick: move |id| after.set(Some(id)),
                     }
                     div { class: "muted small",
-                        if sel_before.as_deref().is_some_and(&has_repeat) || sel_after.as_deref().is_some_and(&has_repeat) {
+                        if sel_before.as_deref().is_some_and(has_repeat) || sel_after.as_deref().is_some_and(has_repeat) {
                             "Stability check available: unstable endpoints are set aside."
                         } else {
                             "No stability check for these captures: timer-driven calls may show as changes."

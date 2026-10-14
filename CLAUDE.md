@@ -26,6 +26,10 @@ names. Never write a version heading yourself.
 
 ## Checks
 
+The compiler is pinned in `rust-toolchain.toml` (rustup installs it on first
+use) and in the workflows' `dtolnay/rust-toolchain@<version>` lines: bump both
+together.
+
 ```bash
 cargo fmt --all --check
 cargo test --workspace
