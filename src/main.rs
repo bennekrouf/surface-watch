@@ -1,5 +1,6 @@
 mod components;
 mod screens;
+mod theme;
 mod update_check;
 
 use dioxus::desktop::LogicalSize;
@@ -49,6 +50,7 @@ fn App() -> Element {
 
     rsx! {
         style { {MAIN_CSS} }
+        theme::ThemeToggle {}
         div { class: "shell",
             if let (Some(info), false) = (update(), dismissed()) {
                 div { class: "update-banner", role: "status",

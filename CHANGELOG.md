@@ -7,6 +7,14 @@ surface monitor for web pentest engagements, and of its command-line edition,
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- A sun/moon button at the top right switches between light and dark. Surface
+  Watch still starts in the same mode as your computer and follows it when it
+  changes, until you pick one with the button.
+
 ## [0.1.3] - 2026-10-16
 
 ### Added
