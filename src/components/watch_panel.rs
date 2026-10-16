@@ -178,7 +178,7 @@ pub fn WatchPanel(
                 match res {
                     Ok(c) => {
                         run.set(Run::Done(format!(
-                            "Imported {} as a capture recorded {}. Cookies, header values, bodies and query values were not kept; the original file stays where it is.",
+                            "Imported {} as a capture recorded {}. Request body field names were kept; no cookie, header value, body value or query value was. The original file stays where it is.",
                             c.label.clone().unwrap_or_default(),
                             c.taken_at.with_timezone(&Local).format("%d %b %H:%M")
                         )));

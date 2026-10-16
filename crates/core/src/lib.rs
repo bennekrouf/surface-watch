@@ -14,12 +14,14 @@
 //! * [`surface`] normalises those events into an attack surface.
 //! * [`flags`] points out surface entries worth a tester's attention.
 //! * [`diff`] compares two surfaces into security-relevant changes.
+//! * [`api0`] exports a target's observed API calls as an api0 catalog.
 //! * [`model`] holds the engagement records the app persists via [`store`];
 //!   [`setup`] validates and creates them.
 //! * [`watch`] stores captures per target and compares any two of them.
 //! * [`discover`] suggests pages to crawl from routes declared in the code.
 //! * [`findings`] promotes diff items to findings, retests and exports them.
 
+pub mod api0;
 pub mod capture;
 pub mod diff;
 pub mod discover;

@@ -195,3 +195,4 @@ table.t td.act { text-align: right; white-space: nowrap; }
 .sg-row { display: flex; align-items: center; gap: 8px; padding: 3px 0; cursor: pointer; min-width: 0; }
 .sg-row .mono { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
 .sg-row.listed { opacity: .6; cursor: default; }
+.api0-notice { display: grid; gap: 6px; }

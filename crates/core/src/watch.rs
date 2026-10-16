@@ -116,6 +116,55 @@ pub fn load_surface(target_dir: &Path, origin: &str, capture_id: &str) -> Result
     Ok(surface)
 }
 
+/// Everything known about a target's endpoints: its latest crawl merged with
+/// every HAR import, since each HAR covers a different flow. Endpoints a HAR
+/// saw are never treated as unstable. Returns the surface and the captures it
+/// was built from.
+pub fn merged_surface(target_dir: &Path, origin: &str) -> Result<(Surface, Vec<Capture>), String> {
+    let captures = list_captures(target_dir);
+    let primary = primary_captures(&captures);
+    let mut used: Vec<Capture> = vec![];
+    if let Some(crawl) = primary
+        .iter()
+        .rev()
+        .find(|c| c.source == CaptureSource::ReaScenario)
+    {
+        used.push((*crawl).clone());
+    }
+    used.extend(
+        primary
+            .iter()
+            .filter(|c| c.source == CaptureSource::Har)
+            .map(|c| (*c).clone()),
+    );
+    let mut merged = Surface {
+        origin: origin.trim_end_matches('/').to_string(),
+        ..Default::default()
+    };
+    let mut from_har = std::collections::BTreeSet::new();
+    for c in &used {
+        let s = load_surface(target_dir, origin, &c.id)?;
+        if c.source == CaptureSource::Har {
+            from_har.extend(s.endpoints.keys().cloned());
+        }
+        for (k, ep) in s.endpoints {
+            let m = merged.endpoints.entry(k).or_default();
+            m.params.extend(ep.params);
+            m.statuses.extend(ep.statuses);
+            m.security_headers.extend(ep.security_headers);
+            m.body_fields.extend(ep.body_fields);
+            m.body_kinds.extend(ep.body_kinds);
+        }
+        merged.scripts.extend(s.scripts);
+        merged.third_party_origins.extend(s.third_party_origins);
+        merged.unstable.extend(s.unstable);
+        merged.documents_seen += s.documents_seen;
+        merged.page_security_headers.extend(s.page_security_headers);
+    }
+    merged.unstable.retain(|k| !from_har.contains(k));
+    Ok((merged, used))
+}
+
 pub fn compare(
     target_dir: &Path,
     origin: &str,

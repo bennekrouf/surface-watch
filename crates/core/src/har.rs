@@ -7,8 +7,9 @@
 //! A HAR is full of secrets: cookies, `Authorization` headers, request and
 //! response bodies, tokens in query strings. None of that is needed for the
 //! surface, so the conversion keeps only what [`crate::surface`] reads —
-//! method, URL without its query, query parameter *names*, resource type,
-//! status and header *names* — and the stored capture holds nothing else.
+//! method, URL without its query, query parameter *names*, request body field
+//! *names*, resource type, status and header *names* — and the stored capture
+//! holds nothing else.
 //! The original file stays where the user keeps it; the capture records its
 //! SHA-256 so the report can cite exactly which recording it came from.
 
@@ -49,6 +50,22 @@ struct Request {
     headers: Vec<NameOnly>,
     #[serde(default)]
     query_string: Vec<NameOnly>,
+    #[serde(default)]
+    post_data: Option<PostData>,
+}
+
+/// A request body. Its text is read only to list field names, then dropped:
+/// the values (passwords, tokens, personal data) are never kept.
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct PostData {
+    #[serde(default)]
+    mime_type: Option<String>,
+    #[serde(default)]
+    text: Option<String>,
+    /// Form and multipart fields, when the recorder split them out.
+    #[serde(default)]
+    params: Vec<NameOnly>,
 }
 
 #[derive(Deserialize)]
@@ -124,10 +141,17 @@ pub fn convert(text: &str) -> Result<Converted, String> {
             .unwrap_or_default();
         let rtype = resource_type(e.resource_type.as_deref(), mime, &url);
         let url_obj = json!({ "url": url, "origin": origin, "query_parameter_names": params });
+        let (body_kind, body_fields) = e
+            .request
+            .post_data
+            .as_ref()
+            .map(body_field_names)
+            .unwrap_or((None, vec![]));
         items.push(json!({
             "kind": "request", "transaction_id": id, "method": e.request.method,
             "url": url_obj, "resource_type": rtype,
-            "header_names": names(&e.request.headers), "status": null
+            "header_names": names(&e.request.headers), "status": null,
+            "body_kind": body_kind, "body_field_names": body_fields
         }));
         // Status 0 means the request never got an answer (blocked, aborted).
         if e.response.status > 0 {
@@ -145,6 +169,44 @@ pub fn convert(text: &str) -> Result<Converted, String> {
         entries: har.log.entries.len(),
         recorded_at,
     })
+}
+
+/// The kind of a request body (`json`, `form`, `multipart`, `other`) and the
+/// names of its top-level fields, sorted. Values are read only as far as
+/// needed to find the names and never returned.
+fn body_field_names(post: &PostData) -> (Option<String>, Vec<String>) {
+    let mime = post
+        .mime_type
+        .as_deref()
+        .unwrap_or_default()
+        .to_ascii_lowercase();
+    let text = post.text.as_deref().unwrap_or_default();
+    let mut fields: Vec<String> = post.params.iter().map(|p| p.name.clone()).collect();
+    let kind = if mime.contains("json") || text.trim_start().starts_with('{') {
+        if let Ok(Value::Object(map)) = serde_json::from_str::<Value>(text) {
+            fields.extend(map.keys().cloned());
+        }
+        "json"
+    } else if mime.contains("x-www-form-urlencoded") {
+        if fields.is_empty() {
+            fields.extend(
+                text.split('&')
+                    .filter_map(|kv| kv.split('=').next())
+                    .filter(|k| !k.is_empty())
+                    .map(|k| k.replace('+', " ")),
+            );
+        }
+        "form"
+    } else if mime.contains("multipart") {
+        "multipart"
+    } else if text.is_empty() && fields.is_empty() {
+        return (None, vec![]);
+    } else {
+        "other"
+    };
+    fields.sort();
+    fields.dedup();
+    (Some(kind.to_string()), fields)
 }
 
 fn names(headers: &[NameOnly]) -> Vec<String> {
@@ -269,9 +331,65 @@ mod tests {
     #[test]
     fn no_secret_from_the_har_survives_the_conversion() {
         let stored = convert(HAR).unwrap().capture.to_string();
-        for secret in ["SECRET", "Bearer", "password", "session="] {
+        // Field names are kept on purpose (`password`); their values never are.
+        for secret in ["SECRET", "Bearer", "session="] {
             assert!(!stored.contains(secret), "{secret} leaked into: {stored}");
         }
+    }
+
+    #[test]
+    fn body_field_names_are_kept_without_their_values() {
+        let c = convert(HAR).unwrap();
+        let chat = c.capture["events"]["items"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|e| e["kind"] == "request" && e["method"] == "POST")
+            .unwrap()
+            .clone();
+        assert_eq!(chat["body_kind"], "json");
+        assert_eq!(chat["body_field_names"], json!(["password"]));
+    }
+
+    #[test]
+    fn form_and_multipart_bodies_give_their_field_names() {
+        let form = PostData {
+            mime_type: Some("application/x-www-form-urlencoded".into()),
+            text: Some("email=a%40b.c&password=hunter2&remember+me=on".into()),
+            params: vec![],
+        };
+        assert_eq!(
+            body_field_names(&form),
+            (
+                Some("form".into()),
+                vec!["email".into(), "password".into(), "remember me".into()]
+            )
+        );
+        let multipart = PostData {
+            mime_type: Some("multipart/form-data; boundary=x".into()),
+            text: None,
+            params: vec![
+                NameOnly {
+                    name: "file".into(),
+                },
+                NameOnly {
+                    name: "title".into(),
+                },
+            ],
+        };
+        assert_eq!(
+            body_field_names(&multipart),
+            (
+                Some("multipart".into()),
+                vec!["file".into(), "title".into()]
+            )
+        );
+        let empty = PostData {
+            mime_type: None,
+            text: None,
+            params: vec![],
+        };
+        assert_eq!(body_field_names(&empty), (None, vec![]));
     }
 
     #[test]

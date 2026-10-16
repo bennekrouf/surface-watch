@@ -7,6 +7,27 @@ surface monitor for web pentest engagements, and of its command-line edition,
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **Export to api0** on the Surface tab, or `surfacewatch export-api0`, writes
+  the API calls a frontend was seen making as an api0 catalog, ready to turn
+  into MCP tools: one group per target, with each endpoint's method, path,
+  path parameters, query parameters and request body fields. It combines the
+  latest crawl with every HAR import, and leaves out static files, websockets
+  and calls that come and go between runs. api0's identity headers stay off
+  unless you tick **My own backend**. A warning reminds you that
+  `api0 api upload` replaces every API in the workspace it uploads to.
+
+### Changed
+
+- **Import HAR** now keeps the names of the fields a request body sent (for
+  example `email` and `password` on a login), never their values. Cookies,
+  header values, body values and query values are still not kept. HAR files
+  imported before this version have no field names; import them again to add
+  them.
+
 ## [0.1.2] - 2026-10-14
 
 ### Added
