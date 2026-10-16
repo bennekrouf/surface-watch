@@ -51,6 +51,12 @@ pub struct Endpoint {
     pub params: BTreeSet<String>,
     pub statuses: BTreeSet<u16>,
     pub security_headers: BTreeSet<String>,
+    /// Request body field names seen in HAR imports (never values).
+    #[serde(default)]
+    pub body_fields: BTreeSet<String>,
+    /// Request body kinds seen: `json`, `form`, `multipart`, `other`.
+    #[serde(default)]
+    pub body_kinds: BTreeSet<String>,
 }
 
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
@@ -119,6 +125,8 @@ impl Surface {
                         let ep = s.endpoints.entry(key).or_default();
                         ep.params
                             .extend(req.url.query_parameter_names.iter().cloned());
+                        ep.body_fields.extend(req.body_field_names.iter().cloned());
+                        ep.body_kinds.extend(req.body_kind.iter().cloned());
                         if let Some(resp) = responses.get(req.transaction_id.as_str()) {
                             if let Some(status) = resp.status {
                                 ep.statuses.insert(status);

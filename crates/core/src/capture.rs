@@ -40,6 +40,12 @@ pub struct NetworkEvent {
     pub header_names: Vec<String>,
     #[serde(default)]
     pub status: Option<u16>,
+    /// `json`, `form`, `multipart` or `other`; HAR imports only.
+    #[serde(default)]
+    pub body_kind: Option<String>,
+    /// Top-level request body field names, never values; HAR imports only.
+    #[serde(default)]
+    pub body_field_names: Vec<String>,
 }
 
 #[derive(Debug, Clone, Deserialize)]

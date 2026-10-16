@@ -8,7 +8,7 @@
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 use surface_watch_core::{
-    capture,
+    api0, capture,
     diff::{self, SurfaceDiff},
     discover, findings,
     model::{CaptureProfile, Engagement},
@@ -33,6 +33,7 @@ USAGE:
   surfacewatch watch <engagement> <target> [--twice]
   surfacewatch findings <engagement> [--retest] [--export]
   surfacewatch suggest-pages <engagement> <target> [--add]
+  surfacewatch export-api0 <engagement> <target> [--forward-identity]
 
 A capture directory holds one REA browser-scenario output per batch (*.json).
 --repeat names a second capture of the after build; endpoints that differ
@@ -58,6 +59,11 @@ fn main() -> ExitCode {
             cmd_target_add(&args[2], &args[3], &args[4], &args[5..])
         }
         Some("import") if args.len() >= 4 => cmd_import(&args[1..]),
+        Some("export-api0") if args.len() >= 3 => cmd_export_api0(
+            &args[1],
+            &args[2],
+            args.iter().any(|a| a == "--forward-identity"),
+        ),
         Some("suggest-pages") if args.len() >= 3 => {
             cmd_suggest_pages(&args[1], &args[2], args.iter().any(|a| a == "--add"))
         }
@@ -324,7 +330,7 @@ fn cmd_import_har(engagement: &str, target: &str, har: &Path) -> Result<(), Stri
     }
     let c = watch::import_har(&watch::target_dir(engagement, target), target, har)?;
     println!(
-        "imported {} as capture {} (recorded {}); cookies, header values, bodies and query values were not kept",
+        "imported {} as capture {} (recorded {}); request body field names were kept, but no cookie, header value, body value or query value",
         har.display(),
         c.id,
         c.taken_at.format("%Y-%m-%d %H:%M UTC")
@@ -428,5 +434,31 @@ fn cmd_suggest_pages(engagement: &str, target: &str, add: bool) -> Result<(), St
             new.len()
         );
     }
+    Ok(())
+}
+
+fn cmd_export_api0(engagement: &str, target: &str, forward_identity: bool) -> Result<(), String> {
+    let e = find_engagement(engagement)?;
+    let t = e
+        .targets
+        .iter()
+        .find(|t| t.id == target)
+        .ok_or_else(|| format!("no target {target:?} in {engagement}"))?;
+    let (path, out) = api0::export(&e, t, api0::Options { forward_identity })?;
+    println!(
+        "{} endpoint(s) exported ({} with request body fields), {} skipped:",
+        out.endpoints,
+        out.with_body_fields,
+        out.skipped.len()
+    );
+    for s in &out.skipped {
+        println!("  skipped {:<40} {}", s.endpoint, s.reason);
+    }
+    println!("\n{}", path.display());
+    println!(
+        "\nWarning: `api0 api upload` replaces every API in the workspace it uploads to, and \
+         the api0 CLI always uploads to your default workspace. Upload into a workspace kept \
+         for imports, or add the group from the api0 console."
+    );
     Ok(())
 }

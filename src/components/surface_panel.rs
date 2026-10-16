@@ -1,7 +1,9 @@
+use crate::components::os::reveal;
 use crate::components::watch_panel::capture_label;
 use dioxus::prelude::*;
+use std::path::PathBuf;
 use surface_watch_core::{
-    findings,
+    api0, findings,
     flags::{endpoint_flags, page_flags, Flag},
     model::{Capture, Engagement, Finding, Target},
     surface::{Endpoint, EndpointKey, Surface},
@@ -75,6 +77,28 @@ pub fn SurfacePanel(engagement: Engagement, target: Target) -> Element {
     let cap = current();
 
     // Creates the finding unless one with the same retest check exists.
+    let mut own_backend = use_signal(|| false);
+    let mut exported = use_signal(|| Option::<Result<(PathBuf, String), String>>::None);
+    let export_api0 = {
+        let (e, t) = (engagement.clone(), target.clone());
+        move |_| {
+            let opts = api0::Options {
+                forward_identity: own_backend(),
+            };
+            exported.set(Some(api0::export(&e, &t, opts).map(|(path, out)| {
+                let summary = format!(
+                    "{} endpoint{} exported, {} with request body fields; {} static or unstable call{} left out.",
+                    out.endpoints,
+                    if out.endpoints == 1 { "" } else { "s" },
+                    out.with_body_fields,
+                    out.skipped.len(),
+                    if out.skipped.len() == 1 { "" } else { "s" },
+                );
+                (path, summary)
+            })));
+        }
+    };
+
     let promote = {
         let eid = engagement.id.clone();
         let tid = target.id.clone();
@@ -100,6 +124,25 @@ pub fn SurfacePanel(engagement: Engagement, target: Target) -> Element {
                     span { class: "muted", "{engagement.client} · {engagement.name}" }
                 }
                 if !primary.is_empty() {
+                    div { class: "row",
+                        label {
+                            class: "check-label",
+                            title: "Send api0's identity headers to this backend. Only for a backend you run: they must not reach anyone else's.",
+                            input {
+                                r#type: "checkbox",
+                                id: "own-backend",
+                                checked: own_backend(),
+                                onchange: move |e| own_backend.set(e.checked()),
+                            }
+                            "My own backend"
+                        }
+                        button {
+                            class: "btn",
+                            title: "Write the API calls seen from this frontend (latest crawl and every HAR import) as an api0 catalog",
+                            onclick: export_api0,
+                            "Export to api0"
+                        }
+                    }
                     label { class: "picker", r#for: "surface-capture",
                         span { class: "k", "Capture" }
                         select {
@@ -115,6 +158,24 @@ pub fn SurfacePanel(engagement: Engagement, target: Target) -> Element {
                         }
                     }
                 }
+            }
+
+            match exported() {
+                Some(Ok((path, summary))) => rsx! {
+                    div { class: "notice api0-notice",
+                        p { "{summary}" }
+                        p { class: "mono small", "{path.display()}" }
+                        p { class: "small warn-text",
+                            "Uploading with `api0 api upload` replaces every API in the workspace it goes to, and the api0 command line always uploads to your default workspace. Upload into a workspace kept for imports, or add the group from the api0 console."
+                        }
+                        div { class: "row",
+                            button { class: "btn", onclick: move |_| reveal(&path), "Show in folder" }
+                            button { class: "btn ghost", onclick: move |_| exported.set(None), "Dismiss" }
+                        }
+                    }
+                },
+                Some(Err(e)) => rsx! { div { class: "notice bad-notice", "Could not export: {e}" } },
+                None => rsx! {},
             }
 
             if let Some(m) = msg() {
