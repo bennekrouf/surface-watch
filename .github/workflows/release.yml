@@ -148,9 +148,19 @@ jobs:
           echo "KEYCHAIN_PATH=$KEYCHAIN_PATH" >> "$GITHUB_ENV"
 
       - name: Build
+        env:
+          # Public half of the key mayorana.ch signs Pro licences with (repository
+          # variable, not a secret). Without it the build can't check licences,
+          # and runs without the free version's limit.
+          SURFACE_WATCH_LICENSE_PUBLIC_KEY: ${{ vars.SURFACE_WATCH_LICENSE_PUBLIC_KEY }}
         run: cargo build --release --target aarch64-apple-darwin
 
       - name: Build CLI
+        env:
+          # Public half of the key mayorana.ch signs Pro licences with (repository
+          # variable, not a secret). Without it the build can't check licences,
+          # and runs without the free version's limit.
+          SURFACE_WATCH_LICENSE_PUBLIC_KEY: ${{ vars.SURFACE_WATCH_LICENSE_PUBLIC_KEY }}
         run: cargo build -p surface-watch-cli --release --target aarch64-apple-darwin --bin surfacewatch
 
       # ── Sign the binary with hardened runtime + webview entitlements ───────
@@ -333,9 +343,19 @@ jobs:
           }
 
       - name: Build
+        env:
+          # Public half of the key mayorana.ch signs Pro licences with (repository
+          # variable, not a secret). Without it the build can't check licences,
+          # and runs without the free version's limit.
+          SURFACE_WATCH_LICENSE_PUBLIC_KEY: ${{ vars.SURFACE_WATCH_LICENSE_PUBLIC_KEY }}
         run: cargo build --release
 
       - name: Build CLI
+        env:
+          # Public half of the key mayorana.ch signs Pro licences with (repository
+          # variable, not a secret). Without it the build can't check licences,
+          # and runs without the free version's limit.
+          SURFACE_WATCH_LICENSE_PUBLIC_KEY: ${{ vars.SURFACE_WATCH_LICENSE_PUBLIC_KEY }}
         run: cargo build -p surface-watch-cli --release --bin surfacewatch
 
       # Staged into dist/ before the signing steps so the CLI gets signed too —
@@ -568,9 +588,19 @@ jobs:
             pkg-config
 
       - name: Build
+        env:
+          # Public half of the key mayorana.ch signs Pro licences with (repository
+          # variable, not a secret). Without it the build can't check licences,
+          # and runs without the free version's limit.
+          SURFACE_WATCH_LICENSE_PUBLIC_KEY: ${{ vars.SURFACE_WATCH_LICENSE_PUBLIC_KEY }}
         run: cargo build --release --target x86_64-unknown-linux-gnu
 
       - name: Build CLI
+        env:
+          # Public half of the key mayorana.ch signs Pro licences with (repository
+          # variable, not a secret). Without it the build can't check licences,
+          # and runs without the free version's limit.
+          SURFACE_WATCH_LICENSE_PUBLIC_KEY: ${{ vars.SURFACE_WATCH_LICENSE_PUBLIC_KEY }}
         run: cargo build -p surface-watch-cli --release --target x86_64-unknown-linux-gnu --bin surfacewatch
 
       - name: Stage CLI binary

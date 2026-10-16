@@ -4,6 +4,7 @@ pub mod engagement_list;
 pub mod findings_panel;
 pub mod os;
 pub mod placeholder_panel;
+pub mod pro;
 pub mod readiness_panel;
 pub mod suggest_panel;
 pub mod surface_panel;

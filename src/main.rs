@@ -27,9 +27,33 @@ fn main() {
         .with_window(
             dioxus::desktop::WindowBuilder::new()
                 .with_title(concat!("Surface Watch ", env!("CARGO_PKG_VERSION")))
-                .with_inner_size(LogicalSize::new(1280.0, 820.0)),
+                .with_inner_size(LogicalSize::new(1280.0, 820.0))
+                .with_window_icon(window_icon()),
         );
     LaunchBuilder::desktop().with_cfg(cfg).launch(App);
+}
+
+/// The window icon, decoded from the embedded logo — same as GitAgent and
+/// TrackCut.
+///
+/// build.rs embeds `assets/icon.ico` into the .exe resource, which covers the
+/// Start menu and shortcuts — but the *window* (title bar, alt-tab, taskbar
+/// button) shows only what the app sets at runtime: Windows falls back to a
+/// blank default and Linux to a generic glyph when it sets nothing.
+///
+/// Downscaled to 64px on the way in: tao hands the OS this single bitmap for
+/// every size it needs, and stretching a 1024px source down to a 16px title
+/// bar is what makes the icon look muddy.
+fn window_icon() -> Option<dioxus::desktop::tao::window::Icon> {
+    const ICON_PNG: &[u8] = include_bytes!("../assets/icon.png");
+    const SIZE: u32 = 64;
+
+    let img = image::load_from_memory(ICON_PNG).ok()?.resize_exact(
+        SIZE,
+        SIZE,
+        image::imageops::FilterType::Lanczos3,
+    );
+    dioxus::desktop::tao::window::Icon::from_rgba(img.into_rgba8().into_raw(), SIZE, SIZE).ok()
 }
 
 #[component]
@@ -48,9 +72,16 @@ fn App() -> Element {
         }
     });
 
+    // Surface Watch Pro: the free version keeps one engagement.
+    use_context_provider(|| components::pro::Pro {
+        open: Signal::new(false),
+        status: Signal::new(surface_watch_core::licence::current()),
+    });
+
     rsx! {
         style { {MAIN_CSS} }
         theme::ThemeToggle {}
+        components::pro::ProWindow {}
         div { class: "shell",
             if let (Some(info), false) = (update(), dismissed()) {
                 div { class: "update-banner", role: "status",
