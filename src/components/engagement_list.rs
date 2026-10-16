@@ -1,5 +1,7 @@
 use dioxus::prelude::*;
-use surface_watch_core::{model::Engagement, store};
+use surface_watch_core::{licence, model::Engagement, store};
+
+use crate::components::pro::{Pro, ProButton};
 
 /// The selected target, as `(engagement id, target id)`.
 pub type Selection = Option<(String, String)>;
@@ -15,6 +17,7 @@ pub fn EngagementList(
     let mut engagements = engagements;
     let mut selected = selected;
     let data_dir = store::data_dir().display().to_string();
+    let mut pro = use_context::<Pro>();
 
     rsx! {
         aside { class: "side",
@@ -23,6 +26,7 @@ pub fn EngagementList(
                 span { class: "brand-version", title: "Installed version",
                     {concat!("v", env!("CARGO_PKG_VERSION"))}
                 }
+                ProButton {}
             }
             div { class: "grp row-between",
                 span { "Engagements" }
@@ -33,7 +37,19 @@ pub fn EngagementList(
                     "Reload"
                 }
             }
-            button { class: "btn new-eng", onclick: move |_| on_new.call(()), "New engagement" }
+            button {
+                class: "btn new-eng",
+                onclick: move |_| {
+                    // Without Pro, a second engagement asks for Pro first.
+                    let n = engagements.read().len();
+                    if licence::engagement_limit(&pro.status.read(), n).is_some() {
+                        pro.open.set(true);
+                    } else {
+                        on_new.call(());
+                    }
+                },
+                "New engagement"
+            }
             if engagements.read().is_empty() {
                 div { class: "empty",
                     p { "No engagements yet." }

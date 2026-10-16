@@ -6,6 +6,9 @@ license-file = "../../LICENSE"
 description = "Shared services (REA runner, surface model, diff engine, store) for Surface Watch frontends"
 
 [dependencies]
+# Checks Surface Watch Pro licence keys, offline (see src/licence.rs).
+base64 = "0.22"
+ed25519-dalek = { version = "2", default-features = false, features = ["std"] }
 chrono = { version = "0.4", features = ["serde"] }
 dirs = "5"
 regex = "1"

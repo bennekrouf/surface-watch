@@ -224,6 +224,9 @@ pub fn create_engagement(
         .into_iter()
         .map(|e| e.id)
         .collect();
+    if let Some(why) = crate::licence::engagement_limit(&crate::licence::current(), taken.len()) {
+        return Err(why);
+    }
     let mut e = build_engagement(draft, &taken)?;
     let t = build_target(target, &e)?;
     e.targets.push(t);

@@ -7,6 +7,24 @@ surface monitor for web pentest engagements, and of its command-line edition,
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Surface Watch Pro. The free version keeps one engagement, with every tab,
+  the command line and scheduled watches; Pro keeps any number, and is the
+  licence for commercial use. Engagements already on your computer stay usable
+  either way. Buy it on [Surface Watch's page](https://mayorana.ch/en/apps/surface-watch),
+  then click **Get Pro…** next to the app's name, or run
+  `surfacewatch licence <key>`. The key is checked on your computer: no
+  account, nothing sent anywhere.
+
+### Fixed
+
+- On Windows and Linux, the Surface Watch window now shows its icon in the
+  title bar, the taskbar and the app switcher, instead of a blank or generic
+  one.
+
 ## [0.1.4] - 2026-10-16
 
 ### Added
