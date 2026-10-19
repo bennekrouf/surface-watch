@@ -358,6 +358,17 @@ jobs:
           SURFACE_WATCH_LICENSE_PUBLIC_KEY: ${{ vars.SURFACE_WATCH_LICENSE_PUBLIC_KEY }}
         run: cargo build -p surface-watch-cli --release --bin surfacewatch
 
+      # The app must start on a PC without the Visual C++ Redistributable, so the
+      # .exe may not import VCRUNTIME140*.dll (see .cargo/config.toml).
+      - name: Check static C runtime
+        shell: pwsh
+        run: |
+          # A script's exit code only fails the step if it is the last one, so stop at the first.
+          foreach ($exe in 'surface-watch.exe', 'surfacewatch.exe') {
+            ./scripts/check-windows-crt.ps1 "target\release\$exe"
+            if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          }
+
       # Staged into dist/ before the signing steps so the CLI gets signed too —
       # its checksum is taken later, alongside the installer's.
       - name: Stage CLI binary
