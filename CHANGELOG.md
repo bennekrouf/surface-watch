@@ -7,6 +7,14 @@ surface monitor for web pentest engagements, and of its command-line edition,
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Surface Watch now includes a script to check for dynamic C runtime
+  dependencies in Windows binaries, ensuring better compatibility across
+  different systems.
+
 ## [0.1.5] - 2026-10-16
 
 ### Added
