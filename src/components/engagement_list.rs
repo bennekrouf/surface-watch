@@ -26,6 +26,14 @@ pub fn EngagementList(
                 span { class: "brand-version", title: "Installed version",
                     {concat!("v", env!("CARGO_PKG_VERSION"))}
                 }
+                // A link, not a button: the webview hands it to the browser.
+                a {
+                    class: "feedback-link",
+                    href: "{crate::feedback::contact_url()}",
+                    target: "_blank",
+                    title: "Ideas, bugs, questions: send them to the person who makes Surface Watch",
+                    "Feedback"
+                }
                 ProButton {}
             }
             div { class: "grp row-between",

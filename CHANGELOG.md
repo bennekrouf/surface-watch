@@ -7,6 +7,14 @@ surface monitor for web pentest engagements, and of its command-line edition,
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- A Feedback link beside the version number opens the contact form with
+  Surface Watch and your version already filled in, so an idea or a problem
+  reaches us in two clicks.
+
 ## [0.1.6] - 2026-10-19
 
 ### Added

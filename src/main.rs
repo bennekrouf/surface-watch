@@ -1,4 +1,5 @@
 mod components;
+mod feedback;
 mod screens;
 mod theme;
 mod update_check;
