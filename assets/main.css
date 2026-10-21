@@ -235,4 +235,7 @@ table.t td.act { text-align: right; white-space: nowrap; }
 .modal h2 { margin: 0; }
 .modal-actions { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
 .pro-ok { color: var(--ok); }
+.free-credits { margin-top: 10px; }
+.free-row { display: flex; gap: 6px; align-items: center; }
+.free-row .licence-key { flex: 1; min-width: 0; }
 .licence-key { width: 100%; padding: 8px; border-radius: 4px; resize: vertical; background: var(--bg); color: var(--ink); border: 1px solid var(--line); font: 12px/1.4 var(--f-mono); }

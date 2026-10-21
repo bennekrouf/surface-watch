@@ -127,6 +127,12 @@ impl Answer {
         self.period_end.get(..10).unwrap_or(&self.period_end)
     }
 
+    /// The free allowance an app hands out: AI credits each month, no app made
+    /// Pro.
+    pub fn is_free(&self) -> bool {
+        self.active && self.products.is_empty()
+    }
+
     /// "Renews on …", or "Ends on …" once cancelled.
     pub fn renewal(&self) -> String {
         let verb = if self.cancel_at_period_end {
@@ -169,6 +175,14 @@ impl Status {
         matches!(self, Status::Pro(_))
     }
 
+    /// api0's answer, when the licence is the free allowance of AI credits.
+    pub fn free_credits(&self) -> Option<&Answer> {
+        match self {
+            Status::NotPro(a) if a.is_free() => Some(a),
+            _ => None,
+        }
+    }
+
     /// The saved licence number, if any.
     pub fn licence(&self) -> Option<&str> {
         match self {
@@ -189,6 +203,13 @@ impl Status {
                 a.plan.name,
                 a.email,
                 a.credits.left,
+                a.renewal()
+            ),
+            Status::NotPro(a) if a.is_free() => format!(
+                "Free: {} AI credits left this month, for {}. {}. The free version keeps \
+                 {FREE_ENGAGEMENTS} engagement; Surface Watch Pro keeps any number: {BUY_URL}",
+                a.credits.left,
+                a.email,
                 a.renewal()
             ),
             Status::NotPro(a) if !a.active => format!(
@@ -220,6 +241,53 @@ pub fn engagement_limit(status: &Status, existing: usize) -> Option<String> {
          Surface Watch Pro keeps any number, and is the licence for commercial use: subscribe at {BUY_URL}, \
          then paste the licence number under Get Pro… in the app, or run `surfacewatch licence <number>`."
     ))
+}
+
+/// Why a request for free AI credits got no licence.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum FreeError {
+    /// There are no free credits right now: the form is hidden.
+    Unavailable,
+    /// Anything else, to show as it is.
+    Refused(String),
+}
+
+/// Whether `email` can be one, before asking api0.
+pub fn plausible_email(email: &str) -> bool {
+    let email = email.trim();
+    match email.split_once('@') {
+        Some((user, domain)) => {
+            !user.is_empty()
+                && domain.contains('.')
+                && !domain.starts_with('.')
+                && !domain.ends_with('.')
+                && !email.contains(char::is_whitespace)
+        }
+        None => false,
+    }
+}
+
+/// api0's reply to `POST /api/plans/free`, read: the message to show once the
+/// licence number is on its way.
+pub fn free_reply(status: u16, body: &str) -> Result<String, FreeError> {
+    let message = serde_json::from_str::<serde_json::Value>(body)
+        .ok()
+        .and_then(|v| v["message"].as_str().map(str::to_owned));
+    match status {
+        200..=299 => Ok(
+            message.unwrap_or_else(|| "Your licence number is on its way to that email.".into())
+        ),
+        404 => Err(FreeError::Unavailable),
+        409 => Err(FreeError::Refused(
+            "This email already has a plan: paste its licence number instead.".into(),
+        )),
+        429 => Err(FreeError::Refused(
+            "Too many requests: try again in a while.".into(),
+        )),
+        _ => Err(FreeError::Refused(message.unwrap_or_else(|| {
+            format!("The free AI credits couldn't be requested (api0 answered {status}).")
+        }))),
+    }
 }
 
 /// What `saved` amounts to at `now` (seconds since 1970).
@@ -383,6 +451,27 @@ pub fn portal_url(licence: &str) -> Result<String, String> {
     Ok(portal.url)
 }
 
+/// Asks api0 to email `email` a licence for the free allowance of AI credits.
+/// The licence number itself only goes by email.
+pub fn request_free_credits(email: &str) -> Result<String, FreeError> {
+    if !plausible_email(email) {
+        return Err(FreeError::Refused(
+            "Enter the email the licence should go to.".into(),
+        ));
+    }
+    let resp = client()
+        .post(format!("{GATEWAY}/api/plans/free"))
+        .header("X-Client-App", PRODUCT)
+        .json(&serde_json::json!({ "email": email.trim() }))
+        .send()
+        .map_err(|e| {
+            FreeError::Refused(format!("The free AI credits couldn't be requested ({e})."))
+        })?;
+    let status = resp.status().as_u16();
+    let body = resp.text().unwrap_or_default();
+    free_reply(status, &body)
+}
+
 /// Removes the licence from this computer (to move it to another one).
 pub fn deactivate() {
     let _ = std::fs::remove_file(licence_path());
@@ -454,6 +543,48 @@ mod tests {
             ..Saved::default()
         };
         assert!(!status_at(Some(&unchecked), now).unlimited());
+    }
+
+    #[test]
+    fn a_free_licence_gives_ai_credits_but_not_pro() {
+        let now = 1_000 * DAY;
+        let mut free = answer(&[], true);
+        free.credits.left = 50;
+        let status = status_at(Some(&saved(free, now)), now);
+        assert!(!status.unlimited());
+        assert!(matches!(status, Status::NotPro(_)));
+        assert_eq!(status.free_credits().map(|a| a.credits.left), Some(50));
+        // A paid plan, or a lapsed free one, isn't the free allowance.
+        let paid = status_at(Some(&saved(answer(&["surface-watch"], true), now)), now);
+        assert!(paid.free_credits().is_none());
+        assert!(status_at(Some(&saved(answer(&[], false), now)), now)
+            .free_credits()
+            .is_none());
+    }
+
+    #[test]
+    fn api0s_reply_to_a_free_credits_request_is_read() {
+        assert_eq!(
+            free_reply(
+                200,
+                r#"{"success":true,"emailed":true,"message":"On its way."}"#
+            ),
+            Ok("On its way.".into())
+        );
+        assert_eq!(
+            free_reply(404, r#"{"message":"There are no free credits right now"}"#),
+            Err(FreeError::Unavailable)
+        );
+        assert!(
+            matches!(free_reply(409, "{}"), Err(FreeError::Refused(m)) if m.contains("already has a plan"))
+        );
+        assert_eq!(
+            free_reply(400, r#"{"message":"Enter the email"}"#),
+            Err(FreeError::Refused("Enter the email".into()))
+        );
+        assert!(plausible_email(" dev@example.ch "));
+        assert!(!plausible_email("dev@example"));
+        assert!(!plausible_email("example.ch"));
     }
 
     #[test]
