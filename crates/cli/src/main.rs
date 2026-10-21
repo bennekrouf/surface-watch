@@ -34,7 +34,7 @@ USAGE:
   surfacewatch findings <engagement> [--retest] [--export]
   surfacewatch suggest-pages <engagement> <target> [--add]
   surfacewatch export-api0 <engagement> <target> [--forward-identity]
-  surfacewatch licence [<number> | --remove]
+  surfacewatch licence [<number> | --remove | --free <email>]
 
 A capture directory holds one REA browser-scenario output per batch (*.json).
 --repeat names a second capture of the after build; endpoints that differ
@@ -99,9 +99,23 @@ fn main() -> ExitCode {
 }
 
 /// `licence` checks the licence with api0 and shows it, `licence <number>`
-/// activates a licence number, `licence --remove` takes it off this computer.
+/// activates a licence number, `licence --remove` takes it off this computer,
+/// and `licence --free <email>` has a licence for free AI credits emailed.
 fn cmd_licence(args: &[String]) -> Result<(), String> {
     let status = match args.first().map(String::as_str) {
+        Some("--free") => {
+            let email = args
+                .get(1)
+                .ok_or("usage: surfacewatch licence --free <email>")?;
+            let message = licence::request_free_credits(email).map_err(|e| match e {
+                licence::FreeError::Unavailable => {
+                    "There are no free AI credits right now.".to_string()
+                }
+                licence::FreeError::Refused(why) => why,
+            })?;
+            println!("{message} Then run `surfacewatch licence <number>` with the number from the email.");
+            return Ok(());
+        }
         Some("--remove") => {
             licence::deactivate();
             println!("Removed the licence from this computer.");

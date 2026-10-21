@@ -7,6 +7,16 @@ surface monitor for web pentest engagements, and of its command-line edition,
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Free AI credits every month, without Pro. Enter your email under Get free
+  AI credits in the Pro window and the licence number arrives by email; paste
+  it in the same window. The window then shows how many credits are left this
+  month. The free version's limits stay as they are. With the command-line
+  edition, run `surfacewatch licence --free <email>`.
+
 ## [0.1.8] - 2026-10-21
 
 ### Changed
