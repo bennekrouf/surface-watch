@@ -34,7 +34,7 @@ USAGE:
   surfacewatch findings <engagement> [--retest] [--export]
   surfacewatch suggest-pages <engagement> <target> [--add]
   surfacewatch export-api0 <engagement> <target> [--forward-identity]
-  surfacewatch licence [<key> | --remove]
+  surfacewatch licence [<number> | --remove]
 
 A capture directory holds one REA browser-scenario output per batch (*.json).
 --repeat names a second capture of the after build; endpoints that differ
@@ -98,40 +98,19 @@ fn main() -> ExitCode {
     }
 }
 
-/// `licence` shows the status, `licence <key>` activates a key, `licence
-/// --remove` takes it off this computer.
+/// `licence` checks the licence with api0 and shows it, `licence <number>`
+/// activates a licence number, `licence --remove` takes it off this computer.
 fn cmd_licence(args: &[String]) -> Result<(), String> {
-    match args.first().map(String::as_str) {
+    let status = match args.first().map(String::as_str) {
         Some("--remove") => {
             licence::deactivate();
             println!("Removed the licence from this computer.");
+            licence::current()
         }
-        Some(_) => {
-            licence::activate(&args.join(""))?;
-        }
-        None => {}
-    }
-    match licence::current() {
-        licence::Status::Free => println!(
-            "Free version: keeps {} engagement. Surface Watch Pro keeps any number: {}",
-            licence::FREE_ENGAGEMENTS,
-            licence::BUY_URL
-        ),
-        licence::Status::Pro(l) => println!(
-            "Surface Watch Pro, licensed to {}. Updates included until {}.",
-            l.email, l.updates_until
-        ),
-        licence::Status::Renew(l) => println!(
-            "Your licence ({}) covers versions released until {}. This version is newer, \
-             so it runs as the free version: renew at {}",
-            l.email,
-            l.updates_until,
-            licence::BUY_URL
-        ),
-        licence::Status::Unavailable => {
-            println!("This build can't check licences, so nothing is limited.")
-        }
-    }
+        Some(_) => licence::activate(&args.join(""))?,
+        None => licence::refresh(true),
+    };
+    println!("{}", status.describe());
     Ok(())
 }
 
@@ -303,7 +282,7 @@ fn cmd_engagement_add(args: &[String]) -> Result<(), String> {
         .into_iter()
         .map(|e| e.id)
         .collect();
-    if let Some(why) = licence::engagement_limit(&licence::current(), taken.len()) {
+    if let Some(why) = licence::engagement_limit(&licence::refresh(false), taken.len()) {
         return Err(why);
     }
     let mut e = setup::build_engagement(&draft, &taken)?;

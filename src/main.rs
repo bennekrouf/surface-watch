@@ -74,9 +74,18 @@ fn App() -> Element {
     });
 
     // Surface Watch Pro: the free version keeps one engagement.
-    use_context_provider(|| components::pro::Pro {
+    let pro = use_context_provider(|| components::pro::Pro {
         open: Signal::new(false),
         status: Signal::new(surface_watch_core::licence::current()),
+    });
+    // The licence is checked with api0 at start, then once a day.
+    use_future(move || async move {
+        let mut status = pro.status;
+        status.set(components::pro::refresh(true).await);
+        loop {
+            tokio::time::sleep(std::time::Duration::from_secs(3600)).await;
+            status.set(components::pro::refresh(false).await);
+        }
     });
 
     rsx! {
