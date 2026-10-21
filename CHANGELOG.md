@@ -7,6 +7,19 @@ surface monitor for web pentest engagements, and of its command-line edition,
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Surface Watch Pro now comes with a monthly plan on mayorana.ch instead of a
+  one-time licence key. Paste the licence number from the plan's email (like
+  ABCDE-FGHJK-LMNPQ-RSTUV) in the Pro window, or run
+  `surfacewatch licence <number>`. Surface Watch checks it when it starts and
+  once a day, and Pro keeps working for a week without a connection.
+- The Pro window shows your plan, the AI credits left this month and when the
+  plan renews. Manage subscription opens the page where you change or cancel
+  it. `surfacewatch licence` shows the same.
+
 ## [0.1.7] - 2026-10-20
 
 ### Added
