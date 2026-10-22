@@ -17,6 +17,15 @@ fn webview_data_dir() -> std::path::PathBuf {
         .join("webview")
 }
 
+/// The native title bar, as in every mayorana app: name, version and licence.
+fn window_title(status: &surface_watch_core::licence::Status) -> String {
+    format!(
+        "Surface Watch {}{}",
+        env!("CARGO_PKG_VERSION"),
+        status.title_badge()
+    )
+}
+
 fn main() {
     // Before anything can shell out: an app launched from Finder or a .dmg
     // does not inherit the terminal's PATH, so `node` and `rea` read as
@@ -27,7 +36,7 @@ fn main() {
         .with_data_directory(webview_data_dir())
         .with_window(
             dioxus::desktop::WindowBuilder::new()
-                .with_title(concat!("Surface Watch ", env!("CARGO_PKG_VERSION")))
+                .with_title(window_title(&surface_watch_core::licence::current()))
                 .with_inner_size(LogicalSize::new(1280.0, 820.0))
                 .with_window_icon(window_icon()),
         );
@@ -77,6 +86,10 @@ fn App() -> Element {
     let pro = use_context_provider(|| components::pro::Pro {
         open: Signal::new(false),
         status: Signal::new(surface_watch_core::licence::current()),
+    });
+    // The title bar follows the licence, however it changes.
+    use_effect(move || {
+        dioxus::desktop::window().set_title(&window_title(&pro.status.read()));
     });
     // The licence is checked with api0 at start, then once a day.
     use_future(move || async move {
