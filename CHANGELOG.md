@@ -7,6 +7,15 @@ surface monitor for web pentest engagements, and of its command-line edition,
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- The window title now shows your licence status: it reads Pro when Pro is
+  active, and Pro inactive when Pro has lapsed or could not be checked. The
+  title updates as soon as the licence changes, so you can see your status
+  without opening the Pro window.
+
 ## [0.1.10] - 2026-10-22
 
 ### Changed
