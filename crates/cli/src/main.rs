@@ -118,7 +118,7 @@ fn cmd_licence(args: &[String]) -> Result<(), String> {
         }
         Some("--remove") => {
             licence::deactivate();
-            println!("Removed the licence from this computer.");
+            println!("Removed the licence from this computer, for every Mayorana app on it.");
             licence::current()
         }
         Some(_) => licence::activate(&args.join(""))?,
