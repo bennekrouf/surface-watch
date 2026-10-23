@@ -144,149 +144,154 @@ pub fn ProWindow() -> Element {
                 class: "modal",
                 // Clicks inside the window don't close it.
                 onclick: move |e| e.stop_propagation(),
-                h2 { "Surface Watch Pro" }
-                match &status {
-                    Status::Free => rsx! {
-                        p {
-                            "The free version keeps one engagement, with every tab, the CLI and scheduled watches. "
-                            "Pro keeps any number of engagements, and is the licence for commercial use. "
-                            "Engagements already on this computer stay usable either way. "
-                            "Pro comes with a monthly plan on mayorana.ch."
-                        }
-                    },
-                    Status::Pro(a) => rsx! {
-                        p { class: "pro-ok",
-                            "Pro is active on this computer: "
-                            strong { "{a.plan.name}" }
-                            " plan for "
-                            strong { "{a.email}" }
-                            "."
-                        }
-                        p { class: "small",
-                            "{a.credits.left} AI credits left this month. {a.renewal()}."
-                        }
-                    },
-                    Status::NotPro(a) if a.is_free() => rsx! {
-                        p {
-                            "Free — "
-                            strong { "{a.credits.left} AI credits" }
-                            " left this month, for "
-                            strong { "{a.email}" }
-                            ". {a.renewal()}."
-                        }
-                        p {
-                            "The free version keeps one engagement. Pro keeps any number, and is the licence for commercial use. "
-                            "It comes with a monthly plan on mayorana.ch."
-                        }
-                    },
-                    Status::NotPro(a) if !a.active => rsx! {
-                        p {
-                            "The subscription for "
-                            strong { "{a.email}" }
-                            " isn't active, so Surface Watch runs as the free version. Renew it to have Pro again."
-                        }
-                    },
-                    Status::NotPro(a) => rsx! {
-                        p {
-                            "The "
-                            strong { "{a.plan.name}" }
-                            " plan doesn't include Surface Watch, so it runs as the free version. A plan with Surface Watch makes it Pro."
-                        }
-                    },
-                    Status::Offline(a) => rsx! {
-                        p {
-                            "Surface Watch hasn't been able to check the licence for "
-                            strong { "{a.email}" }
-                            " for a week, so it runs as the free version until it can. Check the connection, then check again."
-                        }
-                    },
-                    Status::Unknown(_) => rsx! {
-                        p { "The licence number on this computer isn't known. Check it against the email, or paste it again." }
-                    },
+                div { class: "modal-head",
+                    h2 { "Surface Watch Pro" }
+                    button { class: "modal-close", title: "Close", onclick: move |_| close(), "×" }
                 }
-                if !matches!(status, Status::Pro(_)) {
-                    button {
-                        class: "btn pri",
-                        onclick: move |_| {
-                            os::open_in_browser(licence::BUY_URL);
-                        },
-                        if asks_number { "Buy Surface Watch Pro" } else { "Renew Surface Watch Pro" }
-                    }
-                }
-                if asks_number {
-                    p { class: "muted small", "Already subscribed? Paste the licence number from your email:" }
-                    input {
-                        class: "licence-key",
-                        placeholder: "ABCDE-FGHJK-LMNPQ-RSTUV",
-                        value: "{key}",
-                        oninput: move |e| key.set(e.value()),
-                    }
-                    p { class: "muted small",
-                        "The number is checked with api0 now and once a day. Pro keeps working for a week without a connection."
-                    }
-                }
-                if offers_free {
-                    div { class: "free-credits",
-                        p { class: "muted small", "No plan? Get free AI credits every month, without Pro. The licence number comes by email." }
-                        div { class: "free-row",
-                            input {
-                                class: "licence-key",
-                                r#type: "email",
-                                placeholder: "you@example.com",
-                                value: "{free_email}",
-                                oninput: move |e| free_email.set(e.value()),
+                div { class: "modal-body",
+                    match &status {
+                        Status::Free => rsx! {
+                            p {
+                                "The free version keeps one engagement, with every tab, the CLI and scheduled watches. "
+                                "Pro keeps any number of engagements, and is the licence for commercial use. "
+                                "Engagements already on this computer stay usable either way. "
+                                "Pro comes with a monthly plan on mayorana.ch."
                             }
+                        },
+                        Status::Pro(a) => rsx! {
+                            p { class: "pro-ok",
+                                "Pro is active on this computer: "
+                                strong { "{a.plan.name}" }
+                                " plan for "
+                                strong { "{a.email}" }
+                                "."
+                            }
+                            p { class: "small",
+                                "{a.credits.left} AI credits left this month. {a.renewal()}."
+                            }
+                        },
+                        Status::NotPro(a) if a.is_free() => rsx! {
+                            p {
+                                "Free — "
+                                strong { "{a.credits.left} AI credits" }
+                                " left this month, for "
+                                strong { "{a.email}" }
+                                ". {a.renewal()}."
+                            }
+                            p {
+                                "The free version keeps one engagement. Pro keeps any number, and is the licence for commercial use. "
+                                "It comes with a monthly plan on mayorana.ch."
+                            }
+                        },
+                        Status::NotPro(a) if !a.active => rsx! {
+                            p {
+                                "The subscription for "
+                                strong { "{a.email}" }
+                                " isn't active, so Surface Watch runs as the free version. Renew it to have Pro again."
+                            }
+                        },
+                        Status::NotPro(a) => rsx! {
+                            p {
+                                "The "
+                                strong { "{a.plan.name}" }
+                                " plan doesn't include Surface Watch, so it runs as the free version. A plan with Surface Watch makes it Pro."
+                            }
+                        },
+                        Status::Offline(a) => rsx! {
+                            p {
+                                "Surface Watch hasn't been able to check the licence for "
+                                strong { "{a.email}" }
+                                " for a week, so it runs as the free version until it can. Check the connection, then check again."
+                            }
+                        },
+                        Status::Unknown(_) => rsx! {
+                            p { "The licence number on this computer isn't known. Check it against the email, or paste it again." }
+                        },
+                    }
+                    if !matches!(status, Status::Pro(_)) {
+                        button {
+                            class: "btn pri",
+                            onclick: move |_| {
+                                os::open_in_browser(licence::BUY_URL);
+                            },
+                            if asks_number { "Buy Surface Watch Pro" } else { "Renew Surface Watch Pro" }
+                        }
+                    }
+                    if asks_number {
+                        p { class: "muted small", "Already subscribed? Paste the licence number from your email:" }
+                        input {
+                            class: "licence-key",
+                            placeholder: "ABCDE-FGHJK-LMNPQ-RSTUV",
+                            value: "{key}",
+                            oninput: move |e| key.set(e.value()),
+                        }
+                        p { class: "muted small",
+                            "The number is checked with api0 now and once a day. Pro keeps working for a week without a connection."
+                        }
+                    }
+                    if offers_free {
+                        div { class: "free-credits",
+                            p { class: "muted small", "No plan? Get free AI credits every month, without Pro. The licence number comes by email." }
+                            div { class: "free-row",
+                                input {
+                                    class: "licence-key",
+                                    r#type: "email",
+                                    placeholder: "you@example.com",
+                                    value: "{free_email}",
+                                    oninput: move |e| free_email.set(e.value()),
+                                }
+                                button {
+                                    class: "btn",
+                                    disabled: free_email.read().trim().is_empty() || busy(),
+                                    onclick: move |_| ask_free(),
+                                    "Get free AI credits"
+                                }
+                            }
+                            if let Some(n) = free_note.read().as_ref() {
+                                p { class: "pro-ok small", "{n}" }
+                            }
+                        }
+                    }
+                    if let Some(e) = error.read().as_ref() {
+                        p { class: "bad small", "{e}" }
+                    }
+                    div { class: "modal-actions",
+                        if asks_number {
                             button {
                                 class: "btn",
-                                disabled: free_email.read().trim().is_empty() || busy(),
-                                onclick: move |_| ask_free(),
-                                "Get free AI credits"
+                                disabled: key.read().trim().is_empty() || busy(),
+                                onclick: move |_| activate(),
+                                "Activate"
                             }
                         }
-                        if let Some(n) = free_note.read().as_ref() {
-                            p { class: "pro-ok small", "{n}" }
+                        if let (Some(number), false) = (status.licence().map(str::to_owned), asks_number) {
+                            button {
+                                class: "btn",
+                                disabled: busy(),
+                                title: "Change or cancel the plan on mayorana.ch",
+                                onclick: move |_| manage(number.clone()),
+                                "Manage subscription"
+                            }
+                            button {
+                                class: "btn ghost",
+                                disabled: busy(),
+                                onclick: move |_| check_again(),
+                                "Check again"
+                            }
                         }
+                        if status.licence().is_some() {
+                            button {
+                                class: "btn ghost",
+                                title: "Removes it from every Mayorana app on this computer, to move it to another one",
+                                onclick: move |_| {
+                                    licence::deactivate();
+                                    pro.status.set(licence::current());
+                                },
+                                "Remove the licence from this computer"
+                            }
+                        }
+                        button { class: "btn ghost", onclick: move |_| close(), "Close" }
                     }
-                }
-                if let Some(e) = error.read().as_ref() {
-                    p { class: "bad small", "{e}" }
-                }
-                div { class: "modal-actions",
-                    if asks_number {
-                        button {
-                            class: "btn",
-                            disabled: key.read().trim().is_empty() || busy(),
-                            onclick: move |_| activate(),
-                            "Activate"
-                        }
-                    }
-                    if let (Some(number), false) = (status.licence().map(str::to_owned), asks_number) {
-                        button {
-                            class: "btn",
-                            disabled: busy(),
-                            title: "Change or cancel the plan on mayorana.ch",
-                            onclick: move |_| manage(number.clone()),
-                            "Manage subscription"
-                        }
-                        button {
-                            class: "btn ghost",
-                            disabled: busy(),
-                            onclick: move |_| check_again(),
-                            "Check again"
-                        }
-                    }
-                    if status.licence().is_some() {
-                        button {
-                            class: "btn ghost",
-                            title: "Removes it from every Mayorana app on this computer, to move it to another one",
-                            onclick: move |_| {
-                                licence::deactivate();
-                                pro.status.set(licence::current());
-                            },
-                            "Remove the licence from this computer"
-                        }
-                    }
-                    button { class: "btn ghost", onclick: move |_| close(), "Close" }
                 }
             }
         }
