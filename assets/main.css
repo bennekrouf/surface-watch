@@ -7,6 +7,7 @@
   --bad: #f28b82; --bad-bg: #3a1a18; --info: #b4bbcc; --info-bg: #232937;
   --f-body: "IBM Plex Sans", -apple-system, "Segoe UI", system-ui, sans-serif;
   --f-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --mono: 'SF Mono', 'Menlo', 'Monaco', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
   color-scheme: dark;
 }
 /* Light: when the OS is light, or the toggle says so (src/theme.rs). */
@@ -47,7 +48,7 @@ p { margin: 0; }
 .panel { padding: 18px 20px; overflow-y: auto; }
 
 .hd { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 8px; }
-.btn { font: 500 12px/1 var(--f-body); padding: 7px 10px; border-radius: 4px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); cursor: pointer; }
+.btn { font: 12px var(--mono); padding: 7px 14px; border-radius: 7px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); cursor: pointer; }
 
 .check { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--line); max-width: 860px; }
 .check .w { display: grid; gap: 2px; min-width: 0; overflow-wrap: anywhere; }
@@ -181,8 +182,8 @@ table.t td.act { text-align: right; white-space: nowrap; }
 ::placeholder { color: var(--muted); opacity: .6; }
 
 /* ── Header: brand, version, update banner ─────────────────────────────── */
-.brand { display: flex; align-items: baseline; gap: 8px; padding: 4px 8px 10px; border-bottom: 1px solid var(--line); margin-bottom: 4px; }
-.brand-name { font-weight: 600; font-size: 14px; }
+.brand { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 8px; padding: 4px 8px 10px; border-bottom: 1px solid var(--line); margin-bottom: 4px; }
+.brand-name { font-weight: 600; font-size: 14px; white-space: nowrap; }
 .brand-version { font: 11px var(--f-mono); color: var(--muted); }
 .feedback-link { font-size: 11px; color: var(--muted); text-decoration: none; white-space: nowrap; }
 .feedback-link:hover { color: var(--accent); text-decoration: underline; }
