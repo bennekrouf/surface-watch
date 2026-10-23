@@ -7,6 +7,18 @@ surface monitor for web pentest engagements, and of its command-line edition,
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Buttons now have the same size, rounded corners and typeface as in
+  GitAgent, so they look alike across the Mayorana apps.
+
+### Fixed
+
+- The PRO button at the top of the sidebar is no longer cut off: Feedback
+  and PRO move to their own line under the app name.
+
 ## [0.1.11] - 2026-10-22
 
 ### Added
