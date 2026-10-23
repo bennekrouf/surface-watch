@@ -4490,7 +4490,7 @@ checksum = "13c2bddecc57b384dee18652358fb23172facb8a2c51ccc10d74c157bdea3292"
 
 [[package]]
 name = "surface-watch"
-version = "0.1.11"
+version = "0.1.12"
 dependencies = [
  "chrono",
  "dioxus",
@@ -4507,7 +4507,7 @@ dependencies = [
 
 [[package]]
 name = "surface-watch-cli"
-version = "0.1.11"
+version = "0.1.12"
 dependencies = [
  "chrono",
  "serde_json",
@@ -4516,7 +4516,7 @@ dependencies = [
 
 [[package]]
 name = "surface-watch-core"
-version = "0.1.11"
+version = "0.1.12"
 dependencies = [
  "chrono",
  "dirs 5.0.1",
