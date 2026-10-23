@@ -7,6 +7,17 @@ surface monitor for web pentest engagements, and of its command-line edition,
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Dialogs now have a title bar with a × to close them, and text fields have
+  the same size and typeface as in GitAgent.
+- An open dialog now dims the light/dark switch in the corner along with the
+  rest of the window, instead of leaving it lit on top.
+- The buttons along the top of the window now all have the same height,
+  borders included, and the light/dark switch matches them.
+
 ## [0.1.12] - 2026-10-23
 
 ### Changed

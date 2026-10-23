@@ -87,7 +87,7 @@ p { margin: 0; }
 .pickers { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; padding: 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--paper); }
 .picker { display: grid; gap: 4px; }
 .picker .k { font: 500 11px/1 var(--f-mono); letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
-.picker select { font: 13px var(--f-body); padding: 6px 8px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); color: var(--ink); }
+.picker select { font: 12px var(--mono); padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); }
 .pickers .arrow { color: var(--muted); padding-bottom: 7px; }
 .pickers .muted.small { flex-basis: 100%; }
 
@@ -122,8 +122,8 @@ select.sev, .actions select { font: 500 12px var(--f-body); padding: 5px 6px; bo
 .finding .meta { font-size: 12px; display: flex; flex-wrap: wrap; gap: 2px; }
 .fields { display: grid; grid-template-columns: 110px 1fr; gap: 8px 12px; align-items: start; }
 .fields label { font-size: 12px; color: var(--muted); padding-top: 6px; }
-.fields textarea, .fields input { font: 13px/1.5 var(--f-body); color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 6px 8px; resize: vertical; min-width: 0; }
-.fields input.mono { font-family: var(--f-mono); font-size: 12px; }
+.fields textarea, .fields input { font: 13px/1.5 var(--f-body); color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; resize: vertical; min-width: 0; }
+.fields input { font: 12px var(--mono); }
 .fields textarea:focus, .fields input:focus { border-color: var(--accent); outline: none; }
 .ev { display: grid; gap: 4px; }
 .ev .k { font: 500 11px/1 var(--f-mono); letter-spacing: .05em; text-transform: uppercase; color: var(--muted); padding-top: 6px; }
@@ -205,7 +205,7 @@ table.t td.act { text-align: right; white-space: nowrap; }
     position: fixed;
     top: 7px;
     right: 12px;
-    z-index: 1000;
+    z-index: 90; /* under a modal's backdrop, so an open dialog dims it */
     width: 30px;
     height: 30px;
     display: flex;
@@ -231,12 +231,22 @@ table.t td.act { text-align: right; white-space: nowrap; }
 .pro-btn:hover { background: var(--accent-soft); }
 .pro-btn.active { font-weight: 600; letter-spacing: .04em; }
 .pro-btn.renew { border-color: var(--warn); color: var(--warn); }
-.modal-backdrop { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, .55); }
-.modal { width: min(520px, calc(100vw - 32px)); display: flex; flex-direction: column; gap: 10px; padding: 20px; background: var(--paper); color: var(--ink); border: 1px solid var(--line); border-radius: 8px; }
-.modal h2 { margin: 0; }
+.modal-backdrop { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, .55); }
+.modal { width: min(460px, calc(100vw - 32px)); max-height: 84vh; overflow-y: auto; background: var(--paper); color: var(--ink); border: 1px solid var(--line); border-radius: 12px; }
+.modal-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 13px 16px; border-bottom: 1px solid var(--line);
+}
+.modal-head h2 { margin: 0; font-size: 13px; font-weight: 600; color: var(--ink); }
+.modal-close { padding: 0; background: none; border: none; color: var(--muted); font-size: 19px; line-height: 1; cursor: pointer; }
+.modal-close:hover { color: var(--ink); }
+.modal-body { padding: 16px; display: flex; flex-direction: column; gap: 13px; }
 .modal-actions { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
 .pro-ok { color: var(--ok); }
 .free-credits { margin-top: 10px; }
 .free-row { display: flex; gap: 6px; align-items: center; }
 .free-row .licence-key { flex: 1; min-width: 0; }
 .licence-key { width: 100%; padding: 8px; border-radius: 4px; resize: vertical; background: var(--bg); color: var(--ink); border: 1px solid var(--line); font: 12px/1.4 var(--f-mono); }
+
+/* Header controls: one height, borders included, whatever their padding or font. */
+.brand .pro-btn { height: 30px; box-sizing: border-box; padding-top: 0; padding-bottom: 0; display: inline-flex; align-items: center; justify-content: center; }
