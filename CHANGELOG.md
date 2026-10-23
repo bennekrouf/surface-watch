@@ -7,6 +7,14 @@ surface monitor for web pentest engagements, and of its command-line edition,
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- The new-version banner and the usage-statistics notice now look the same
+  as in GitAgent: a blue bar across the top, or the bottom for the notice,
+  with a Download link and a × to hide it.
+
 ## [0.1.13] - 2026-10-23
 
 ### Changed

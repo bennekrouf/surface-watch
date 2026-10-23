@@ -108,7 +108,7 @@ fn App() -> Element {
         div { class: "shell",
             if let (Some(info), false) = (update(), dismissed()) {
                 div { class: "update-banner", role: "status",
-                    span { class: "update-text",
+                    span { class: "update-banner-text",
                         "Surface Watch "
                         strong { "{info.latest_version}" }
                         " is available (you have {env!(\"CARGO_PKG_VERSION\")})."
@@ -120,7 +120,7 @@ fn App() -> Element {
                         let url = info.release_url.clone();
                         rsx! {
                             button {
-                                class: "btn pri",
+                                class: "update-banner-link",
                                 onclick: move |_| {
                                     components::os::open_in_browser(&url);
                                 },
@@ -136,7 +136,7 @@ fn App() -> Element {
                         }
                     }
                     button {
-                        class: "btn ghost",
+                        class: "update-banner-dismiss",
                         title: "Hide until the next launch",
                         onclick: move |_| dismissed.set(true),
                         "×"
