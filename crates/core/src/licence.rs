@@ -1,4 +1,4 @@
-//! Surface Watch Pro: the licence on this computer.
+//! SurfaceWatch Pro: the licence on this computer.
 //!
 //! Pro comes with a monthly plan bought on mayorana.ch. The plan's licence
 //! number (`ABCDE-FGHJK-LMNPQ-RSTUV`, emailed when it is bought) is saved here
@@ -12,11 +12,11 @@
 //! ```
 //!
 //! The answer names the plan, the apps it makes Pro, whether it is paid up and
-//! the AI credits left. It is kept on disk, so the CLI and a Surface Watch
+//! the AI credits left. It is kept on disk, so the CLI and a SurfaceWatch
 //! started offline read the last one: Pro lasts [`GRACE`] after the last check
 //! that got through, then waits for the next.
 //!
-//! Without Pro, Surface Watch keeps [`FREE_ENGAGEMENTS`] engagement: creating
+//! Without Pro, SurfaceWatch keeps [`FREE_ENGAGEMENTS`] engagement: creating
 //! another one, from the app or the CLI, asks for Pro. Engagements already on
 //! disk are never locked or removed.
 //!
@@ -27,16 +27,16 @@ use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 use serde::{Deserialize, Serialize};
 
-/// The product id api0 knows Surface Watch by: a plan lists it to make
-/// Surface Watch Pro.
+/// The product id api0 knows SurfaceWatch by: a plan lists it to make
+/// SurfaceWatch Pro. It keeps the app's earlier name, which licences carry.
 pub const PRODUCT: &str = "surface-watch";
 
-/// Where "Buy Surface Watch Pro" leads.
-pub const BUY_URL: &str = "https://mayorana.ch/en/apps/surface-watch";
+/// Where "Buy SurfaceWatch Pro" leads.
+pub const BUY_URL: &str = "https://mayorana.ch/en/apps/surfacewatch";
 
 const GATEWAY: &str = "https://gateway.api0.ai";
 
-/// How often the licence is checked while Surface Watch is open.
+/// How often the licence is checked while SurfaceWatch is open.
 pub const CHECK_EVERY: Duration = Duration::from_secs(24 * 3600);
 
 /// How long Pro lasts without a check getting through (offline, api0 down).
@@ -117,7 +117,7 @@ pub struct Answer {
 }
 
 impl Answer {
-    /// The plan is paid up and includes Surface Watch.
+    /// The plan is paid up and includes SurfaceWatch.
     pub fn unlocks(&self) -> bool {
         self.active && self.products.iter().any(|p| p == PRODUCT || p == "*")
     }
@@ -159,9 +159,9 @@ pub struct Saved {
 pub enum Status {
     /// No licence on this computer.
     Free,
-    /// The plan includes Surface Watch and is paid up, as of a check within [`GRACE`].
+    /// The plan includes SurfaceWatch and is paid up, as of a check within [`GRACE`].
     Pro(Answer),
-    /// Checked: the plan has lapsed, or doesn't include Surface Watch.
+    /// Checked: the plan has lapsed, or doesn't include SurfaceWatch.
     NotPro(Answer),
     /// Pro at the last check, but no check has got through for [`GRACE`].
     Offline(Answer),
@@ -170,7 +170,7 @@ pub enum Status {
 }
 
 impl Status {
-    /// What the window title adds after "Surface Watch <version>", as GitAgent's does:
+    /// What the window title adds after "SurfaceWatch <version>", as GitAgent's does:
     /// Pro, or a Pro that has lapsed (unpaid, or no check for the grace period).
     pub fn title_badge(&self) -> &'static str {
         match self {
@@ -207,14 +207,14 @@ impl Status {
         }
     }
 
-    /// What `surfacewatch licence` prints.
+    /// What `surfacewatch-cli licence` prints.
     pub fn describe(&self) -> String {
         match self {
             Status::Free => format!(
-                "Free version: keeps {FREE_ENGAGEMENTS} engagement. Surface Watch Pro keeps any number: {BUY_URL}"
+                "Free version: keeps {FREE_ENGAGEMENTS} engagement. SurfaceWatch Pro keeps any number: {BUY_URL}"
             ),
             Status::Pro(a) => format!(
-                "Surface Watch Pro: {} plan for {}. {} AI credits left this month. {}.",
+                "SurfaceWatch Pro: {} plan for {}. {} AI credits left this month. {}.",
                 a.plan.name,
                 a.email,
                 a.credits.left,
@@ -222,7 +222,7 @@ impl Status {
             ),
             Status::NotPro(a) if a.is_free() => format!(
                 "Free: {} AI credits left this month, for {}. {}. The free version keeps \
-                 {FREE_ENGAGEMENTS} engagement; Surface Watch Pro keeps any number: {BUY_URL}",
+                 {FREE_ENGAGEMENTS} engagement; SurfaceWatch Pro keeps any number: {BUY_URL}",
                 a.credits.left,
                 a.email,
                 a.renewal()
@@ -232,14 +232,14 @@ impl Status {
                 a.email
             ),
             Status::NotPro(a) => format!(
-                "The {} plan doesn't include Surface Watch, so this runs as the free version: {BUY_URL}",
+                "The {} plan doesn't include SurfaceWatch, so this runs as the free version: {BUY_URL}",
                 a.plan.name
             ),
             Status::Offline(_) => "The licence couldn't be checked for a week (offline?), so this \
                  runs as the free version until it can."
                 .into(),
             Status::Unknown(_) => "The licence number on this computer isn't known. Check it \
-                 against the email and run `surfacewatch licence <number>` again."
+                 against the email and run `surfacewatch-cli licence <number>` again."
                 .into(),
         }
     }
@@ -252,9 +252,9 @@ pub fn engagement_limit(status: &Status, existing: usize) -> Option<String> {
         return None;
     }
     Some(format!(
-        "The free version of Surface Watch keeps one engagement, and this computer already has {existing}. \
-         Surface Watch Pro keeps any number, and is the licence for commercial use: subscribe at {BUY_URL}, \
-         then paste the licence number under Get Pro… in the app, or run `surfacewatch licence <number>`."
+        "The free version of SurfaceWatch keeps one engagement, and this computer already has {existing}. \
+         SurfaceWatch Pro keeps any number, and is the licence for commercial use: subscribe at {BUY_URL}, \
+         then paste the licence number under Get Pro… in the app, or run `surfacewatch-cli licence <number>`."
     ))
 }
 

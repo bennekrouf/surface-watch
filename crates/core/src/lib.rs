@@ -1,4 +1,4 @@
-//! Shared, UI-agnostic services for Surface Watch.
+//! Shared, UI-agnostic services for SurfaceWatch.
 //!
 //! Both frontends — the Dioxus desktop app at the workspace root and the
 //! headless CLI in `crates/cli` — depend on this crate, so there is exactly

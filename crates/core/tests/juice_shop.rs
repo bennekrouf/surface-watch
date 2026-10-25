@@ -8,7 +8,7 @@
 //! expectations below are the changes that are actually in the code.
 
 use std::path::{Path, PathBuf};
-use surface_watch_core::{
+use surfacewatch_core::{
     capture,
     diff::{diff, ChangeKind},
     surface::Surface,
@@ -76,7 +76,7 @@ fn hashed_chunk_names_do_not_count_as_new_scripts() {
 
 #[test]
 fn the_v20_surface_flags_what_a_tester_would_look_at_first() {
-    use surface_watch_core::flags::{endpoint_flags, page_flags, Flag};
+    use surfacewatch_core::flags::{endpoint_flags, page_flags, Flag};
     let s = surface("v20.3.0");
     let leads: Vec<(String, Flag)> = s
         .endpoints

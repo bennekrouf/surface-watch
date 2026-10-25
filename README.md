@@ -1,4 +1,4 @@
-# Surface Watch
+# SurfaceWatch
 
 A local console that watches the **client-side attack surface** of the web apps
 in a pentest engagement. It captures each target with
@@ -12,8 +12,8 @@ Runs fully local. No LLM is involved.
 
 | Edition | Best for | Built with |
 |---|---|---|
-| **Surface Watch** (Desktop) | Reviewing engagements, diffs and findings | [Dioxus](https://dioxuslabs.com/) (Rust) |
-| **`surfacewatch`** (CLI) | Scheduled watches from cron or CI, quick checks over SSH | Rust, same core |
+| **SurfaceWatch** (Desktop) | Reviewing engagements, diffs and findings | [Dioxus](https://dioxuslabs.com/) (Rust) |
+| **`surfacewatch-cli`** (CLI) | Scheduled watches from cron or CI, quick checks over SSH | Rust, same core |
 
 > Status: early. The core, the CLI, all five desktop tabs (Surface, Watch,
 > Findings, Captures, Readiness) and the engagement and target forms work.
@@ -23,12 +23,12 @@ Runs fully local. No LLM is involved.
 
 | Platform | Download |
 |---|---|
-| **macOS** (Apple Silicon) | [`surface-watch-macos-arm64.dmg`](https://mayorana.ch/downloads/surface-watch/latest/surface-watch-macos-arm64.dmg): open it, drag **Surface Watch** to Applications. Signed and notarized. |
-| **Windows** | [`surface-watch-setup.exe`](https://mayorana.ch/downloads/surface-watch/latest/surface-watch-setup.exe): run the installer (no admin rights needed). |
-| **Linux** (x86_64) | `curl -L https://mayorana.ch/downloads/surface-watch/latest/surface-watch-linux-x86_64.tar.gz \| tar xz && cd surface-watch-linux-x86_64 && sudo ./setup-linux.sh && ./surface-watch` |
+| **macOS** (Apple Silicon) | [`surfacewatch-macos-arm64.dmg`](https://mayorana.ch/downloads/surfacewatch/latest/surfacewatch-macos-arm64.dmg): open it, drag **SurfaceWatch** to Applications. Signed and notarized. |
+| **Windows** | [`surfacewatch-setup.exe`](https://mayorana.ch/downloads/surfacewatch/latest/surfacewatch-setup.exe): run the installer (no admin rights needed). |
+| **Linux** (x86_64) | `curl -L https://mayorana.ch/downloads/surfacewatch/latest/surfacewatch-linux-x86_64.tar.gz \| tar xz && cd surfacewatch-linux-x86_64 && sudo ./setup-linux.sh && ./surfacewatch` |
 
-The `surfacewatch` command line for each platform is attached to every
-[release](https://mayorana.ch/en/apps/surface-watch/releases). The app tells
+The `surfacewatch-cli` command line for each platform is attached to every
+[release](https://mayorana.ch/en/apps/surfacewatch/releases). The app tells
 you when a newer version is out.
 
 ## Releasing
@@ -53,29 +53,29 @@ creates the GitHub Release. Secrets are the same set as AIS Monitor's.
 ## Try it
 
 ```bash
-cargo run -p surface-watch-cli -- readiness
+cargo run -p surfacewatch-cli -- readiness
 ```
 
 Capture a target (pages are crawled in batches of 6):
 
 ```bash
-cargo run -p surface-watch-cli -- capture http://127.0.0.1:3000 captures/base '#/search' '#/login' '#/basket'
+cargo run -p surfacewatch-cli -- capture http://127.0.0.1:3000 captures/base '#/search' '#/login' '#/basket'
 ```
 
 Compare two captures, with a second capture of the new build to suppress
 unstable endpoints:
 
 ```bash
-cargo run -p surface-watch-cli -- diff http://127.0.0.1:3000 captures/base captures/new --repeat captures/new-again
+cargo run -p surfacewatch-cli -- diff http://127.0.0.1:3000 captures/base captures/new --repeat captures/new-again
 ```
 
 Or keep captures per engagement and let `watch` compare each new one with the
 first (the baseline):
 
 ```bash
-cargo run -p surface-watch-cli -- engagement add acme "Acme" "Retail Q4" --auth "SOW-2026-114" --from 2026-10-01 --to 2026-10-31
-cargo run -p surface-watch-cli -- target add acme shop https://shop.acme.example '#/search' '#/login'
-cargo run -p surface-watch-cli -- watch acme shop --twice
+cargo run -p surfacewatch-cli -- engagement add acme "Acme" "Retail Q4" --auth "SOW-2026-114" --from 2026-10-01 --to 2026-10-31
+cargo run -p surfacewatch-cli -- target add acme shop https://shop.acme.example '#/search' '#/login'
+cargo run -p surfacewatch-cli -- watch acme shop --twice
 ```
 
 The desktop app, where the Watch tab shows the same comparison:
@@ -88,7 +88,7 @@ cargo run
 
 ```
 crates/core   surface model, diff engine, REA runner, readiness, store
-crates/cli    surfacewatch binary
+crates/cli    surfacewatch-cli binary
 src/          Dioxus desktop app (screens, components)
 ```
 

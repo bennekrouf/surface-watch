@@ -1,4 +1,4 @@
-//! `surfacewatch` — the headless edition.
+//! `surfacewatch-cli` — the headless edition.
 //!
 //! The desktop app is where engagements are reviewed; this binary is for the
 //! places a window is not: a scheduled watch from cron, a CI job, or a quick
@@ -7,7 +7,7 @@
 
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
-use surface_watch_core::{
+use surfacewatch_core::{
     api0, capture,
     diff::{self, SurfaceDiff},
     discover, findings, licence,
@@ -18,23 +18,23 @@ use surface_watch_core::{
 };
 
 const USAGE: &str = "\
-surfacewatch — client-side attack surface monitor
+surfacewatch-cli — client-side attack surface monitor
 
 USAGE:
-  surfacewatch readiness
-  surfacewatch capture <origin> <out-dir> <page>...
-  surfacewatch surface <origin> <capture-dir>
-  surfacewatch diff <origin> <before-dir> <after-dir> [--repeat <dir>] [--json]
+  surfacewatch-cli readiness
+  surfacewatch-cli capture <origin> <out-dir> <page>...
+  surfacewatch-cli surface <origin> <capture-dir>
+  surfacewatch-cli diff <origin> <before-dir> <after-dir> [--repeat <dir>] [--json]
 
-  surfacewatch engagement add <id> <client> <name> --auth TEXT [--from YYYY-MM-DD] [--to YYYY-MM-DD]
-  surfacewatch target add <engagement> <target-id> <origin> <page>...
-  surfacewatch import <engagement> <target> <capture-dir> [--repeat-of <capture-id>]
-  surfacewatch import-har <engagement> <target> <file.har>
-  surfacewatch watch <engagement> <target> [--twice]
-  surfacewatch findings <engagement> [--retest] [--export]
-  surfacewatch suggest-pages <engagement> <target> [--add]
-  surfacewatch export-api0 <engagement> <target> [--forward-identity]
-  surfacewatch licence [<number> | --remove | --free <email>]
+  surfacewatch-cli engagement add <id> <client> <name> --auth TEXT [--from YYYY-MM-DD] [--to YYYY-MM-DD]
+  surfacewatch-cli target add <engagement> <target-id> <origin> <page>...
+  surfacewatch-cli import <engagement> <target> <capture-dir> [--repeat-of <capture-id>]
+  surfacewatch-cli import-har <engagement> <target> <file.har>
+  surfacewatch-cli watch <engagement> <target> [--twice]
+  surfacewatch-cli findings <engagement> [--retest] [--export]
+  surfacewatch-cli suggest-pages <engagement> <target> [--add]
+  surfacewatch-cli export-api0 <engagement> <target> [--forward-identity]
+  surfacewatch-cli licence [<number> | --remove | --free <email>]
 
 A capture directory holds one REA browser-scenario output per batch (*.json).
 --repeat names a second capture of the after build; endpoints that differ
@@ -44,7 +44,7 @@ between the two are suppressed as unstable.
 --twice captures it a second time to find unstable endpoints.";
 
 fn main() -> ExitCode {
-    surface_watch_core::env::adopt_login_path();
+    surfacewatch_core::env::adopt_login_path();
     let args: Vec<String> = std::env::args().skip(1).collect();
     let result = match args.first().map(String::as_str) {
         Some("readiness") => cmd_readiness(),
@@ -81,7 +81,7 @@ fn main() -> ExitCode {
         }
         Some("licence" | "license") => cmd_licence(&args[1..]),
         Some("--version" | "-V") => {
-            println!("surfacewatch {}", env!("CARGO_PKG_VERSION"));
+            println!("surfacewatch-cli {}", env!("CARGO_PKG_VERSION"));
             Ok(())
         }
         _ => {
@@ -106,14 +106,16 @@ fn cmd_licence(args: &[String]) -> Result<(), String> {
         Some("--free") => {
             let email = args
                 .get(1)
-                .ok_or("usage: surfacewatch licence --free <email>")?;
+                .ok_or("usage: surfacewatch-cli licence --free <email>")?;
             let message = licence::request_free_credits(email).map_err(|e| match e {
                 licence::FreeError::Unavailable => {
                     "There are no free AI credits right now.".to_string()
                 }
                 licence::FreeError::Refused(why) => why,
             })?;
-            println!("{message} Then run `surfacewatch licence <number>` with the number from the email.");
+            println!(
+                "{message} Then run `surfacewatch-cli licence <number>` with the number from the email."
+            );
             return Ok(());
         }
         Some("--remove") => {

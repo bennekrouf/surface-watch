@@ -115,7 +115,7 @@ impl ScanBrowser {
             .map(|a| a.port())
             .map_err(|e| format!("no free local port: {e}"))?;
         let profile = std::env::temp_dir().join(format!(
-            "surface-watch-scan-{}-{}",
+            "surfacewatch-scan-{}-{}",
             std::process::id(),
             Utc::now().timestamp_millis()
         ));

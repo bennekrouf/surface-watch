@@ -1,4 +1,4 @@
-# Surface Watch
+# SurfaceWatch
 
 Modelled on AIS Monitor: a Dioxus desktop app at the root, a shared
 `crates/core`, and a headless edition (`crates/cli`) instead of a TUI. REA is

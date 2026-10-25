@@ -9,7 +9,7 @@ use std::collections::HashMap;
 
 /// Served from mayorana.ch alongside the builds it describes, so update
 /// checks do not depend on the source repository staying publicly readable.
-const LATEST_URL: &str = "https://mayorana.ch/downloads/surface-watch/latest/latest.json";
+const LATEST_URL: &str = "https://mayorana.ch/downloads/surfacewatch/latest/latest.json";
 /// Fallback when `latest.json` has no entry for this OS (e.g. an Intel Mac —
 /// only Apple Silicon is built). Sends the user to pick a build by hand
 /// instead of at a link that would 404.
@@ -20,7 +20,7 @@ const RELEASES_URL: &str = "https://mayorana.ch/en/apps";
 /// carries the version, which is what makes per-version adoption
 /// visible — the number that says how many people are still on a build
 /// with a bug that is already fixed.
-const USER_AGENT: &str = concat!("surface-watch/", env!("CARGO_PKG_VERSION"), " (updater)");
+const USER_AGENT: &str = concat!("surfacewatch/", env!("CARGO_PKG_VERSION"), " (updater)");
 
 #[derive(Debug, Deserialize)]
 struct LatestJson {

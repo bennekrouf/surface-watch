@@ -4489,7 +4489,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "13c2bddecc57b384dee18652358fb23172facb8a2c51ccc10d74c157bdea3292"
 
 [[package]]
-name = "surface-watch"
+name = "surfacewatch"
 version = "0.1.15"
 dependencies = [
  "chrono",
@@ -4500,22 +4500,22 @@ dependencies = [
  "rfd 0.15.4",
  "serde",
  "serde_json",
- "surface-watch-core",
+ "surfacewatch-core",
  "tokio",
  "winresource",
 ]
 
 [[package]]
-name = "surface-watch-cli"
+name = "surfacewatch-cli"
 version = "0.1.15"
 dependencies = [
  "chrono",
  "serde_json",
- "surface-watch-core",
+ "surfacewatch-core",
 ]
 
 [[package]]
-name = "surface-watch-core"
+name = "surfacewatch-core"
 version = "0.1.15"
 dependencies = [
  "chrono",

@@ -57,7 +57,7 @@ mod tests {
     #[test]
     fn only_plain_web_urls_are_opened() {
         assert!(is_web_url(
-            "https://mayorana.ch/downloads/surface-watch/v0.2.0/x.dmg?src=updater"
+            "https://mayorana.ch/downloads/surfacewatch/v0.2.0/x.dmg?src=updater"
         ));
         assert!(!is_web_url("file:///etc/passwd"));
         assert!(!is_web_url("javascript:alert(1)"));

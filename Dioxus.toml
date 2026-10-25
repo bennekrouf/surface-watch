@@ -1,12 +1,13 @@
 [application]
-name = "surface-watch"
+name = "surfacewatch"
 default_platform = "desktop"
 
 [desktop]
-title = "Surface Watch"
+title = "SurfaceWatch"
 
 [bundle]
+# Kept from before SurfaceWatch: macOS knows the installed app by it.
 identifier = "ch.mayorana.surface-watch"
 
 [web.app]
-title = "Surface Watch"
+title = "SurfaceWatch"

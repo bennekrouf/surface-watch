@@ -1,11 +1,25 @@
 # Changelog
 
-What changed in each release of **Surface Watch**, the client-side attack
+What changed in each release of **SurfaceWatch**, the client-side attack
 surface monitor for web pentest engagements, and of its command-line edition,
-`surfacewatch`.
+`surfacewatch-cli` (called Surface Watch and `surfacewatch` before 0.1.16).
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Changed
+
+- Surface Watch is now called SurfaceWatch, written as one word like the other
+  Mayorana apps. Your engagements, captures and licence carry over: they stay
+  in the same folder. On macOS the update installs as SurfaceWatch.app; once it
+  runs, you can delete Surface Watch.app from Applications. On Windows the
+  update replaces the old version and its Start menu entry.
+- The command line is now `surfacewatch-cli` (`surfacewatch-cli.exe` on
+  Windows), so that the desktop app can be `surfacewatch`, as GitAgent is
+  `gitagent`. Scripts and cron jobs that run `surfacewatch` need the new name;
+  the commands and their options are unchanged.
 
 ## [0.1.15] - 2026-10-25
 

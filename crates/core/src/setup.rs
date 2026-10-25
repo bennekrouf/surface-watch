@@ -1,7 +1,7 @@
 //! Creating engagements and targets, from the app's form or the CLI.
 //!
 //! Validation lives here, not in either frontend, so a target typed into the
-//! form and one passed to `surfacewatch target add` follow the same rules.
+//! form and one passed to `surfacewatch-cli target add` follow the same rules.
 //! Every error says what to type instead.
 
 use crate::model::{CaptureProfile, Engagement, Target};

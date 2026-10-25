@@ -2,7 +2,7 @@ use crate::components::os::reveal;
 use chrono::{Local, Utc};
 use dioxus::prelude::*;
 use std::path::PathBuf;
-use surface_watch_core::{
+use surfacewatch_core::{
     findings::{self, severity_label, status_label},
     model::{Check, Engagement, Finding, Retest, RetestStatus, Severity},
     watch,

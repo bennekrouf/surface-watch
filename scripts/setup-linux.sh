@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# setup-linux.sh — one-time setup for Surface Watch on Linux (Debian/Ubuntu/Fedora/Arch)
+# setup-linux.sh — one-time setup for SurfaceWatch on Linux (Debian/Ubuntu/Fedora/Arch)
 #
 # Installs the WebKitGTK runtime the window needs and a desktop launcher.
 # Checks, without installing, what captures need: Node.js 22.19+ (for REA)
@@ -77,31 +77,36 @@ fi
 
 # ── Desktop launcher ─────────────────────────────────────────────────────────
 BINARY_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DESKTOP_FILE="/usr/share/applications/surface-watch.desktop"
+DESKTOP_FILE="/usr/share/applications/surfacewatch.desktop"
+
+# The launcher and icon from when the app was Surface Watch, so the menu
+# doesn't show it twice.
+rm -f /usr/share/applications/surface-watch.desktop \
+      /usr/share/icons/hicolor/256x256/apps/surface-watch.png
 
 ICON_NAME="utilities-terminal"
 if [[ -f "$BINARY_DIR/icon.png" ]]; then
   ICON_DIR="/usr/share/icons/hicolor/256x256/apps"
-  install -Dm644 "$BINARY_DIR/icon.png" "$ICON_DIR/surface-watch.png"
+  install -Dm644 "$BINARY_DIR/icon.png" "$ICON_DIR/surfacewatch.png"
   command -v gtk-update-icon-cache &>/dev/null && gtk-update-icon-cache -q -t /usr/share/icons/hicolor || true
-  ICON_NAME="surface-watch"
+  ICON_NAME="surfacewatch"
 fi
 
-if [[ -f "$BINARY_DIR/surface-watch" ]]; then
+if [[ -f "$BINARY_DIR/surfacewatch" ]]; then
   cat > "$DESKTOP_FILE" <<EOF
 [Desktop Entry]
-Name=Surface Watch
+Name=SurfaceWatch
 Comment=Client-side attack surface monitor for web pentests
-Exec=$BINARY_DIR/surface-watch
+Exec=$BINARY_DIR/surfacewatch
 Icon=$ICON_NAME
 Terminal=false
 Type=Application
 Categories=Development;Security;
-StartupWMClass=surface-watch
+StartupWMClass=surfacewatch
 EOF
   command -v update-desktop-database &>/dev/null && update-desktop-database -q /usr/share/applications || true
   ok "Desktop launcher created"
 fi
 
 echo ""
-echo "Setup complete. Run ./surface-watch to start the app."
+echo "Setup complete. Run ./surfacewatch to start the app."

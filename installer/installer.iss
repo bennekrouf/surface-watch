@@ -1,15 +1,15 @@
-; Surface Watch — Windows Installer
+; SurfaceWatch — Windows Installer
 ; Build: iscc /DMyAppVersion=X.Y.Z installer\installer.iss
-; Output: dist\surface-watch-setup-X.Y.Z.exe
+; Output: dist\surfacewatch-setup-X.Y.Z.exe
 
 #ifndef MyAppVersion
   #define MyAppVersion "0.1.0"
 #endif
 
-#define MyAppName      "Surface Watch"
+#define MyAppName      "SurfaceWatch"
 #define MyAppPublisher "Mayorana"
 #define MyAppURL       "https://github.com/Bennekrouf/surface-watch"
-#define MyAppExeName   "surface-watch.exe"
+#define MyAppExeName   "surfacewatch.exe"
 
 [Setup]
 AppId={{6E2B9F41-8C3D-4A7E-B5F2-1D9C0A4E7B36}
@@ -32,10 +32,10 @@ DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
 OutputDir=..\dist
 ; No version in the filename — stable name lets the same download URL
-; ("…/releases/latest/download/surface-watch-setup.exe") always work. Version
+; ("…/releases/latest/download/surfacewatch-setup.exe") always work. Version
 ; info is still visible in the installer wizard, exe properties, and the
 ; app's own title bar and sidebar header.
-OutputBaseFilename=surface-watch-setup
+OutputBaseFilename=surfacewatch-setup
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
@@ -67,7 +67,7 @@ Name: "desktopicon"; \
   GroupDescription: "Additional shortcuts:"
 
 [Files]
-Source: "..\target\release\surface-watch.exe";     DestDir: "{app}"; Flags: ignoreversion
+Source: "..\target\release\surfacewatch.exe";     DestDir: "{app}"; Flags: ignoreversion
 Source: "..\target\release\WebView2Loader.dll";   DestDir: "{app}"; Flags: ignoreversion
 ; Ship the .ico alongside the .exe so shortcuts can point at it explicitly —
 ; otherwise some Windows builds fail to extract the embedded icon for shortcut

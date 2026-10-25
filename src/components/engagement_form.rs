@@ -1,6 +1,6 @@
 use chrono::Local;
 use dioxus::prelude::*;
-use surface_watch_core::{
+use surfacewatch_core::{
     model::Engagement,
     setup::{self, EngagementDraft, TargetDraft},
 };

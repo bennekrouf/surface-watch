@@ -1,9 +1,9 @@
-//! The Surface Watch Pro window: what the free version does, the plan on
+//! The SurfaceWatch Pro window: what the free version does, the plan on
 //! this computer, and where to paste a licence number. The limit itself lives in the
 //! core (`licence::engagement_limit`), so the CLI keeps it too.
 
 use dioxus::prelude::*;
-use surface_watch_core::licence::{self, FreeError, Status, FREE_ENGAGEMENTS};
+use surfacewatch_core::licence::{self, FreeError, Status, FREE_ENGAGEMENTS};
 
 use crate::components::os;
 
@@ -43,7 +43,7 @@ pub fn ProButton() -> Element {
         Status::Pro(a) => (
             "✦ PRO",
             "pro-btn active",
-            format!("Surface Watch Pro, {} plan for {}", a.plan.name, a.email),
+            format!("SurfaceWatch Pro, {} plan for {}", a.plan.name, a.email),
         ),
         Status::NotPro(a) if a.is_free() => (
             "Get Pro…",
@@ -56,7 +56,7 @@ pub fn ProButton() -> Element {
         Status::NotPro(_) | Status::Offline(_) | Status::Unknown(_) => (
             "✦ RENEW PRO",
             "pro-btn renew",
-            "Your licence doesn't make this Surface Watch Pro right now".to_owned(),
+            "Your licence doesn't make this SurfaceWatch Pro right now".to_owned(),
         ),
         Status::Free => (
             "Get Pro…",
@@ -78,7 +78,7 @@ pub fn ProWindow() -> Element {
     let mut free_email = use_signal(String::new);
     let mut free_note = use_signal(|| Option::<String>::None);
     let mut free_hidden = use_signal(|| false);
-    // Set by an Activate that made Surface Watch Pro, so the window
+    // Set by an Activate that made SurfaceWatch Pro, so the window
     // congratulates rather than just reporting it.
     let mut activated = use_signal(|| false);
     // Escape closes the window wherever the focus is: the Pro view has no
@@ -202,7 +202,7 @@ pub fn ProWindow() -> Element {
                 // Clicks inside the window don't close it.
                 onclick: move |e| e.stop_propagation(),
                 div { class: "modal-head",
-                    h2 { "Surface Watch Pro" }
+                    h2 { "SurfaceWatch Pro" }
                     button { class: "modal-close", title: "Close", onclick: move |_| close(), "×" }
                 }
                 div { class: "modal-body",
@@ -244,19 +244,19 @@ pub fn ProWindow() -> Element {
                             p {
                                 "The subscription for "
                                 strong { "{a.email}" }
-                                " isn't active, so Surface Watch runs as the free version. Renew it to have Pro again."
+                                " isn't active, so SurfaceWatch runs as the free version. Renew it to have Pro again."
                             }
                         },
                         Status::NotPro(a) => rsx! {
                             p {
                                 "The "
                                 strong { "{a.plan.name}" }
-                                " plan doesn't include Surface Watch, so it runs as the free version. A plan with Surface Watch makes it Pro."
+                                " plan doesn't include SurfaceWatch, so it runs as the free version. A plan with SurfaceWatch makes it Pro."
                             }
                         },
                         Status::Offline(a) => rsx! {
                             p {
-                                "Surface Watch hasn't been able to check the licence for "
+                                "SurfaceWatch hasn't been able to check the licence for "
                                 strong { "{a.email}" }
                                 " for a week, so it runs as the free version until it can. Check the connection, then check again."
                             }
@@ -271,7 +271,7 @@ pub fn ProWindow() -> Element {
                             onclick: move |_| {
                                 os::open_in_browser(licence::BUY_URL);
                             },
-                            if asks_number { "Buy Surface Watch Pro" } else { "Renew Surface Watch Pro" }
+                            if asks_number { "Buy SurfaceWatch Pro" } else { "Renew SurfaceWatch Pro" }
                         }
                     }
                     if asks_number {
