@@ -1,5 +1,5 @@
 use dioxus::prelude::*;
-use surface_watch_core::readiness::{self, CheckState};
+use surfacewatch_core::readiness::{self, CheckState};
 
 /// Toolchain checks plus the known REA issues and their workarounds.
 #[component]

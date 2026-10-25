@@ -6,7 +6,7 @@ deliberately does not grant: the name and the brand.**
 
 ## What this covers
 
-- The names **"Surface Watch"**, **"surface-watch"**, **"surfacewatch"**, **"Bennekrouf"**, and **"Mayorana"**.
+- The names **"SurfaceWatch"**, **"surfacewatch"**, and the earlier **"Surface Watch"** and **"surface-watch"**, as well as **"Bennekrouf"** and **"Mayorana"**.
 - The project logo and application icons, including `assets/icon.svg`,
   `assets/icon.png`, and any icon derived or generated from them (such as the
   `assets/icon.ico` produced during the Windows build).

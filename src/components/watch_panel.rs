@@ -1,7 +1,7 @@
 use crate::components::suggest_panel::SuggestPanel;
 use chrono::{Local, Utc};
 use dioxus::prelude::*;
-use surface_watch_core::{
+use surfacewatch_core::{
     diff::{Change, ChangeKind, SurfaceDiff},
     findings,
     model::{Capture, CaptureSource, Engagement, Target},

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# release.sh — cut a release for surface-watch
+# release.sh — cut a release for surfacewatch
 #
 # Usage:
 #   ./scripts/release.sh            # auto-bump patch
@@ -183,4 +183,4 @@ git push origin "$TAG"
 echo ""
 echo "  $TAG pushed — CI is running."
 echo "  https://github.com/Bennekrouf/surface-watch/actions"
-echo "  Releases page  -> https://mayorana.ch/en/apps/surface-watch/releases"
+echo "  Releases page  -> https://mayorana.ch/en/apps/surfacewatch/releases"

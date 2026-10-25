@@ -9,7 +9,7 @@ use crate::components::{
     watch_panel::WatchPanel,
 };
 use dioxus::prelude::*;
-use surface_watch_core::store;
+use surfacewatch_core::store;
 
 /// The per-target tabs, in display order.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]

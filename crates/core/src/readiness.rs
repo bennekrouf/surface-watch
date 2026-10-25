@@ -51,7 +51,7 @@ pub const KNOWN_ISSUES: &[(&str, &str)] = &[
     ),
     (
         "compare-web-captures rejects REA's own output file",
-        "Surface Watch reads either shape and does its own comparison.",
+        "SurfaceWatch reads either shape and does its own comparison.",
     ),
 ];
 

@@ -92,7 +92,7 @@ struct NameOnly {
     name: String,
 }
 
-/// A HAR converted into Surface Watch's capture format.
+/// A HAR converted into SurfaceWatch's capture format.
 #[derive(Debug, Clone)]
 pub struct Converted {
     /// `{"source":"har","events":{...}}`, readable by [`crate::capture::parse`].

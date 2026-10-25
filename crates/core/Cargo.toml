@@ -1,12 +1,12 @@
 [package]
-name = "surface-watch-core"
+name = "surfacewatch-core"
 version.workspace = true
 edition = "2021"
 license-file = "../../LICENSE"
-description = "Shared services (REA runner, surface model, diff engine, store) for Surface Watch frontends"
+description = "Shared services (REA runner, surface model, diff engine, store) for SurfaceWatch frontends"
 
 [dependencies]
-# Checks the Surface Watch Pro licence with api0 (see src/licence.rs).
+# Checks the SurfaceWatch Pro licence with api0 (see src/licence.rs).
 # Blocking, for the CLI; the app calls it off its UI thread.
 reqwest = { version = "0.12", features = ["blocking", "json"] }
 chrono = { version = "0.4", features = ["serde"] }

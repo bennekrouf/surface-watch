@@ -13,14 +13,15 @@ const MAIN_CSS: &str = include_str!("../assets/main.css");
 fn webview_data_dir() -> std::path::PathBuf {
     dirs::data_local_dir()
         .unwrap_or_else(|| std::path::PathBuf::from("."))
+        // The data folder keeps the name from before SurfaceWatch; see store::data_dir.
         .join("Surface Watch")
         .join("webview")
 }
 
 /// The native title bar, as in every mayorana app: name, version and licence.
-fn window_title(status: &surface_watch_core::licence::Status) -> String {
+fn window_title(status: &surfacewatch_core::licence::Status) -> String {
     format!(
-        "Surface Watch {}{}",
+        "SurfaceWatch {}{}",
         env!("CARGO_PKG_VERSION"),
         status.title_badge()
     )
@@ -30,13 +31,13 @@ fn main() {
     // Before anything can shell out: an app launched from Finder or a .dmg
     // does not inherit the terminal's PATH, so `node` and `rea` read as
     // "not found".
-    surface_watch_core::env::adopt_login_path();
+    surfacewatch_core::env::adopt_login_path();
 
     let cfg = dioxus::desktop::Config::new()
         .with_data_directory(webview_data_dir())
         .with_window(
             dioxus::desktop::WindowBuilder::new()
-                .with_title(window_title(&surface_watch_core::licence::current()))
+                .with_title(window_title(&surfacewatch_core::licence::current()))
                 .with_inner_size(LogicalSize::new(1280.0, 820.0))
                 .with_window_icon(window_icon()),
         );
@@ -82,10 +83,10 @@ fn App() -> Element {
         }
     });
 
-    // Surface Watch Pro: the free version keeps one engagement.
+    // SurfaceWatch Pro: the free version keeps one engagement.
     let pro = use_context_provider(|| components::pro::Pro {
         open: Signal::new(false),
-        status: Signal::new(surface_watch_core::licence::current()),
+        status: Signal::new(surfacewatch_core::licence::current()),
     });
     // The title bar follows the licence, however it changes.
     use_effect(move || {
@@ -109,7 +110,7 @@ fn App() -> Element {
             if let (Some(info), false) = (update(), dismissed()) {
                 div { class: "update-banner", role: "status",
                     span { class: "update-banner-text",
-                        "Surface Watch "
+                        "SurfaceWatch "
                         strong { "{info.latest_version}" }
                         " is available (you have {env!(\"CARGO_PKG_VERSION\")})."
                     }

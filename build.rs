@@ -24,8 +24,8 @@ fn main() {
 
         let mut res = winresource::WindowsResource::new();
         res.set_icon("assets/icon.ico");
-        res.set("FileDescription", "Surface Watch");
-        res.set("ProductName", "Surface Watch");
+        res.set("FileDescription", "SurfaceWatch");
+        res.set("ProductName", "SurfaceWatch");
         res.set("CompanyName", "Mayorana");
         res.set("LegalCopyright", "© 2026 Mayorana");
         if let Err(e) = res.compile() {

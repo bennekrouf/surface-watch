@@ -1,4 +1,4 @@
-# Link the MSVC C runtime statically on Windows. With the default dynamic CRT, surface-watch.exe and surfacewatch.exe
+# Link the MSVC C runtime statically on Windows. With the default dynamic CRT, surfacewatch.exe and surfacewatch-cli.exe
 # import VCRUNTIME140.dll / VCRUNTIME140_1.dll and fail to start on any PC without the Visual
 # C++ Redistributable. The installer is per-user with no UAC prompt, so it can't install the
 # redistributable itself.

@@ -1,7 +1,7 @@
 use crate::components::os::reveal;
 use chrono::Local;
 use dioxus::prelude::*;
-use surface_watch_core::{
+use surfacewatch_core::{
     findings,
     flags::{endpoint_flags, Flag},
     model::{Capture, CaptureSource, Engagement, Finding, Target},
@@ -182,7 +182,7 @@ pub fn CapturesPanel(engagement: Engagement, target: Target) -> Element {
                                     if tools.is_empty() {
                                         span { class: "muted",
                                             {match c.source {
-                                                CaptureSource::Har => "Recorded outside Surface Watch",
+                                                CaptureSource::Har => "Recorded outside SurfaceWatch",
                                                 CaptureSource::ReaScenario => "Not recorded (imported capture)",
                                             }}
                                         }

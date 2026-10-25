@@ -2,7 +2,7 @@ use crate::components::os::reveal;
 use crate::components::watch_panel::capture_label;
 use dioxus::prelude::*;
 use std::path::PathBuf;
-use surface_watch_core::{
+use surfacewatch_core::{
     api0, findings,
     flags::{endpoint_flags, page_flags, Flag},
     model::{Capture, Engagement, Finding, Target},

@@ -2,7 +2,7 @@
 # VC++ Redistributable installed. .cargo/config.toml links the CRT statically; this
 # catches that config being lost or a dependency pulling the dynamic CRT back in.
 #
-# Usage: pwsh scripts/check-windows-crt.ps1 target\release\surface-watch.exe
+# Usage: pwsh scripts/check-windows-crt.ps1 target\release\surfacewatch.exe
 param([Parameter(Mandatory)][string]$Exe)
 
 $ErrorActionPreference = "Stop"

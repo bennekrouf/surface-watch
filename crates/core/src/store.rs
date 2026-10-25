@@ -28,7 +28,8 @@ use std::path::Path;
 use std::path::PathBuf;
 use std::sync::{Mutex, MutexGuard, OnceLock};
 
-/// Where engagements live: `<local data dir>/Surface Watch`.
+/// Where engagements live: `<local data dir>/Surface Watch`. The folder keeps
+/// the app's name from before SurfaceWatch, so engagements made then are found.
 pub fn data_dir() -> PathBuf {
     dirs::data_local_dir()
         .unwrap_or_else(|| PathBuf::from("."))

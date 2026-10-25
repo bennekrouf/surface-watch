@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 use std::collections::BTreeSet;
-use surface_watch_core::{
+use surfacewatch_core::{
     discover,
     model::{Engagement, Target},
     rea, setup,

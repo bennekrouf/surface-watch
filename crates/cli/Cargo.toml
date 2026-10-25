@@ -1,16 +1,16 @@
 [package]
-name = "surface-watch-cli"
+name = "surfacewatch-cli"
 version.workspace = true
 edition = "2021"
 license-file = "../../LICENSE"
-description = "Headless Surface Watch: readiness, capture and diff from the terminal, cron or CI"
-default-run = "surfacewatch"
+description = "Headless SurfaceWatch: readiness, capture and diff from the terminal, cron or CI"
+default-run = "surfacewatch-cli"
 
 [[bin]]
-name = "surfacewatch"
+name = "surfacewatch-cli"
 path = "src/main.rs"
 
 [dependencies]
-surface-watch-core = { path = "../core" }
+surfacewatch-core = { path = "../core" }
 serde_json = "1"
 chrono = "0.4"
