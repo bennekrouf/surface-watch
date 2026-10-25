@@ -17,6 +17,13 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   longer sit beside it; Manage subscription is a small link. Press Esc or
   the × to close it.
 
+### Fixed
+
+- Installing silently, as IT does for an unattended update with `/VERYSILENT`,
+  no longer hangs when Surface Watch is already installed: setup waited on a
+  question nobody could see. It now replaces the installed version without
+  asking.
+
 ## [0.1.14] - 2026-10-23
 
 ### Changed
