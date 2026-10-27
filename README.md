@@ -1,5 +1,7 @@
 # SurfaceWatch
 
+![Surface Watch comparing two captures of OWASP Juice Shop: removed endpoints, changed parameters and third-party origins](docs/screenshot.png)
+
 A local console that watches the **client-side attack surface** of the web apps
 in a pentest engagement. It captures each target with
 [REA](https://github.com/morluto/rea), normalises the traffic into a surface
