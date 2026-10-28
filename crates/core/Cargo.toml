@@ -8,9 +8,10 @@ description = "Shared services (REA runner, surface model, diff engine, store) f
 [dependencies]
 # The licence rule every mayorana desktop app shares (see src/licence.rs).
 desktop-kit = { path = "../../../desktop-kit" }
-# Checks the SurfaceWatch Pro licence with api0 (see src/licence.rs).
-# Blocking, for the CLI; the app calls it off its UI thread.
-reqwest = { version = "0.12", features = ["blocking", "json"] }
+# desktop-kit's requests: the update check, the notice and the licence (see
+# src/kit.rs). The CLI runs them on a runtime of its own (see src/licence.rs).
+reqwest = "0.12"
+tokio = { version = "1", features = ["rt", "time"] }
 chrono = { version = "0.4", features = ["serde"] }
 dirs = "5"
 regex = "1"

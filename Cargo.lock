@@ -904,7 +904,7 @@ dependencies = [
 
 [[package]]
 name = "desktop-kit"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "base64 0.22.1",
  "dioxus",
@@ -1727,7 +1727,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b1f9e3d69d39e4862ffed03ed071a76f9a13ba1d9109d355b0f0aa6b15e393c4"
 dependencies = [
  "futures-core",
- "futures-sink",
 ]
 
 [[package]]
@@ -4216,9 +4215,7 @@ dependencies = [
  "base64 0.22.1",
  "bytes",
  "encoding_rs",
- "futures-channel",
  "futures-core",
- "futures-util",
  "h2",
  "http",
  "http-body",
@@ -4848,7 +4845,6 @@ dependencies = [
  "dioxus",
  "dirs 5.0.1",
  "image",
- "reqwest",
  "rfd 0.15.4",
  "serde",
  "serde_json",
@@ -4878,6 +4874,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sha2",
+ "tokio",
 ]
 
 [[package]]
