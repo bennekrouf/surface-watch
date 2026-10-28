@@ -7,6 +7,7 @@
 
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
+use surfacewatch_core::licence::StatusExt;
 use surfacewatch_core::{
     api0, capture,
     diff::{self, SurfaceDiff},

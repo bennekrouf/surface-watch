@@ -7,6 +7,15 @@ surface monitor for web pentest engagements, and of its command-line edition,
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Setting `DISABLE_UPDATE_CHECK` now turns the update check off, as it does
+  in the other mayorana apps.
+- To try a staging `latest.json`, set `MAYORANA_UPDATE_URL` (it was
+  `SURFACE_WATCH_UPDATE_URL`).
+
 ## [0.1.17] - 2026-10-27
 
 ### Changed

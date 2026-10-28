@@ -1,5 +1,6 @@
 mod components;
 mod feedback;
+mod kit;
 mod screens;
 mod theme;
 mod update_check;
@@ -7,6 +8,7 @@ mod update_check;
 use dioxus::desktop::LogicalSize;
 use dioxus::prelude::*;
 use screens::main_screen::MainScreen;
+use surfacewatch_core::licence::StatusExt;
 
 const MAIN_CSS: &str = include_str!("../assets/main.css");
 
@@ -28,6 +30,7 @@ fn window_title(status: &surfacewatch_core::licence::Status) -> String {
 }
 
 fn main() {
+    kit::init();
     // Before anything can shell out: an app launched from Finder or a .dmg
     // does not inherit the terminal's PATH, so `node` and `rea` read as
     // "not found".
@@ -118,7 +121,7 @@ fn App() -> Element {
                         // A button, not a link: the URL comes from a remote
                         // file and must open in the browser, never in the
                         // app's own webview.
-                        let url = info.release_url.clone();
+                        let url = info.download_url.clone();
                         rsx! {
                             button {
                                 class: "update-banner-link",

@@ -67,6 +67,8 @@ impl Flag {
 }
 
 /// Path words that name an area testers check first.
+// A constant pattern: a mistake in it fails the tests, not a user's run.
+#[allow(clippy::unwrap_used)]
 fn sensitive_path() -> &'static Regex {
     static RE: OnceLock<Regex> = OnceLock::new();
     RE.get_or_init(|| {
