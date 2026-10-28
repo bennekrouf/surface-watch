@@ -36,13 +36,16 @@ USAGE:
   surfacewatch-cli suggest-pages <engagement> <target> [--add]
   surfacewatch-cli export-api0 <engagement> <target> [--forward-identity]
   surfacewatch-cli licence [<number> | --remove | --free <email>]
+  surfacewatch-cli mcp
 
 A capture directory holds one REA browser-scenario output per batch (*.json).
 --repeat names a second capture of the after build; endpoints that differ
 between the two are suppressed as unstable.
 
 `watch` captures a stored target and compares it with its first capture.
---twice captures it a second time to find unstable endpoints.";
+--twice captures it a second time to find unstable endpoints.
+
+`mcp` serves the engagements, read-only, to an MCP client over stdio.";
 
 fn main() -> ExitCode {
     surfacewatch_core::kit::init();
@@ -82,6 +85,10 @@ fn main() -> ExitCode {
             cmd_watch(&args[1], &args[2], args.iter().any(|a| a == "--twice"))
         }
         Some("licence" | "license") => cmd_licence(&args[1..]),
+        Some("mcp") => {
+            surfacewatch_core::mcp::serve();
+            Ok(())
+        }
         Some("--version" | "-V") => {
             println!("surfacewatch-cli {}", env!("CARGO_PKG_VERSION"));
             Ok(())

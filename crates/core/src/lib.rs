@@ -20,6 +20,7 @@
 //! * [`watch`] stores captures per target and compares any two of them.
 //! * [`discover`] suggests pages to crawl from routes declared in the code.
 //! * [`findings`] promotes diff items to findings, retests and exports them.
+//! * [`mcp`] serves all of the above, read-only, to an MCP client over stdio.
 
 pub mod api0;
 pub mod capture;
@@ -31,6 +32,7 @@ pub mod flags;
 pub mod har;
 pub mod kit;
 pub mod licence;
+pub mod mcp;
 pub mod model;
 pub mod rea;
 pub mod readiness;
