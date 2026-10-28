@@ -29,6 +29,7 @@ pub mod env;
 pub mod findings;
 pub mod flags;
 pub mod har;
+pub mod kit;
 pub mod licence;
 pub mod model;
 pub mod rea;

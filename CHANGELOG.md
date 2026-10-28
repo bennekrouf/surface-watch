@@ -7,6 +7,24 @@ surface monitor for web pentest engagements, and of its command-line edition,
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- SurfaceWatch now shows the occasional message from mayorana.ch, under the bar
+  at the top, until you close it.
+
+### Changed
+
+- The update banner and the occasional message from mayorana.ch now sit just
+  under the bar at the top of the window instead of covering it, and look the
+  same in every mayorana app. Download opens the new build in your browser and
+  shows its SHA-256 when one is published, to compare with the file you
+  downloaded.
+- The Pro window looks and reads the same in every mayorana app. Once you're Pro
+  it names your plan and email, and pressing Enter in the licence number field
+  activates it.
+
 ## [0.1.19] - 2026-10-28
 
 ### Changed

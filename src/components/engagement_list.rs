@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 use surfacewatch_core::{licence, model::Engagement, store};
 
-use crate::components::pro::Pro;
+use desktop_kit::ui::Pro;
 
 /// The selected target, as `(engagement id, target id)`.
 pub type Selection = Option<(String, String)>;

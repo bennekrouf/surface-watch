@@ -1,13 +1,10 @@
 mod components;
-mod kit;
 mod screens;
-mod update_check;
 
-use desktop_kit::ui::{use_theme, Header};
+use desktop_kit::ui::{use_pro, use_theme, Banners, Header, ProButton, ProWindow};
 use dioxus::desktop::LogicalSize;
 use dioxus::prelude::*;
 use screens::main_screen::MainScreen;
-use surfacewatch_core::licence::StatusExt;
 
 const MAIN_CSS: &str = include_str!("../assets/main.css");
 
@@ -24,12 +21,12 @@ fn window_title(status: &surfacewatch_core::licence::Status) -> String {
     format!(
         "SurfaceWatch {}{}",
         env!("CARGO_PKG_VERSION"),
-        status.title_badge()
+        surfacewatch_core::licence::title_badge(status)
     )
 }
 
 fn main() {
-    kit::init();
+    surfacewatch_core::kit::init();
     // Before anything can shell out: an app launched from Finder or a .dmg
     // does not inherit the terminal's PATH, so `node` and `rea` read as
     // "not found".
@@ -71,82 +68,21 @@ fn window_icon() -> Option<dioxus::desktop::tao::window::Icon> {
 
 #[component]
 fn App() -> Element {
-    let mut update = use_signal(|| Option::<update_check::UpdateInfo>::None);
-    let mut dismissed = use_signal(|| false);
-    use_future(move || async move {
-        // After the window is up, never in its way; skipped when the user
-        // has opted out of update checks.
-        tokio::time::sleep(std::time::Duration::from_secs(3)).await;
-        if std::env::var_os("DISABLE_UPDATE_CHECK").is_some() {
-            return;
-        }
-        if let Some(info) = update_check::check().await {
-            update.set(Some(info));
-        }
-    });
-
     // SurfaceWatch Pro: the free version keeps one engagement.
-    let pro = use_context_provider(|| components::pro::Pro {
-        open: Signal::new(false),
-        status: Signal::new(surfacewatch_core::licence::current()),
-    });
+    // Checked with api0 at start, then once a day.
+    let pro = use_pro();
     // The title bar follows the licence, however it changes.
     use_effect(move || {
         dioxus::desktop::window().set_title(&window_title(&pro.status.read()));
-    });
-    // The licence is checked with api0 at start, then once a day.
-    use_future(move || async move {
-        let mut status = pro.status;
-        status.set(components::pro::refresh(true).await);
-        loop {
-            tokio::time::sleep(std::time::Duration::from_secs(3600)).await;
-            status.set(components::pro::refresh(false).await);
-        }
     });
 
     let theme = use_theme();
     rsx! {
         style { {MAIN_CSS} }
-        components::pro::ProWindow {}
+        ProWindow { pro, pitch: components::pro::pitch() }
+        Banners {}
         div { class: "shell",
-            Header { theme, pro: rsx! { components::pro::ProButton {} } }
-            if let (Some(info), false) = (update(), dismissed()) {
-                div { class: "update-banner", role: "status",
-                    span { class: "update-banner-text",
-                        "SurfaceWatch "
-                        strong { "{info.latest_version}" }
-                        " is available (you have {env!(\"CARGO_PKG_VERSION\")})."
-                    }
-                    {
-                        // A button, not a link: the URL comes from a remote
-                        // file and must open in the browser, never in the
-                        // app's own webview.
-                        let url = info.download_url.clone();
-                        rsx! {
-                            button {
-                                class: "update-banner-link",
-                                onclick: move |_| {
-                                    components::os::open_in_browser(&url);
-                                },
-                                "Download"
-                            }
-                        }
-                    }
-                    if !info.sha256.is_empty() {
-                        span {
-                            class: "mono small update-sha",
-                            title: "SHA-256 of the published build: compare it with the file you downloaded. Full value: {info.sha256}",
-                            {format!("sha256 {}…", &info.sha256[..info.sha256.len().min(12)])}
-                        }
-                    }
-                    button {
-                        class: "update-banner-dismiss",
-                        title: "Hide until the next launch",
-                        onclick: move |_| dismissed.set(true),
-                        "×"
-                    }
-                }
-            }
+            Header { theme, pro: rsx! { ProButton { pro, hint: components::pro::hint() } } }
             MainScreen {}
         }
     }

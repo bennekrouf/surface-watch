@@ -45,6 +45,7 @@ between the two are suppressed as unstable.
 --twice captures it a second time to find unstable endpoints.";
 
 fn main() -> ExitCode {
+    surfacewatch_core::kit::init();
     surfacewatch_core::env::adopt_login_path();
     let args: Vec<String> = std::env::args().skip(1).collect();
     let result = match args.first().map(String::as_str) {
@@ -108,7 +109,7 @@ fn cmd_licence(args: &[String]) -> Result<(), String> {
             let email = args
                 .get(1)
                 .ok_or("usage: surfacewatch-cli licence --free <email>")?;
-            let message = licence::request_free_credits(email).map_err(|e| match e {
+            let message = licence::blocking::request_free_credits(email).map_err(|e| match e {
                 licence::FreeError::Unavailable => {
                     "There are no free AI credits right now.".to_string()
                 }
@@ -124,8 +125,8 @@ fn cmd_licence(args: &[String]) -> Result<(), String> {
             println!("Removed the licence from this computer, for every Mayorana app on it.");
             licence::current()
         }
-        Some(_) => licence::activate(&args.join(""))?,
-        None => licence::refresh(true),
+        Some(_) => licence::blocking::activate(&args.join(""))?,
+        None => licence::blocking::refresh(true),
     };
     println!("{}", status.describe());
     Ok(())
@@ -299,7 +300,7 @@ fn cmd_engagement_add(args: &[String]) -> Result<(), String> {
         .into_iter()
         .map(|e| e.id)
         .collect();
-    if let Some(why) = licence::engagement_limit(&licence::refresh(false), taken.len()) {
+    if let Some(why) = licence::engagement_limit(&licence::blocking::refresh(false), taken.len()) {
         return Err(why);
     }
     let mut e = setup::build_engagement(&draft, &taken)?;
