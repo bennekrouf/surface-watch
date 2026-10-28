@@ -5,7 +5,7 @@ members = ["crates/core", "crates/cli"]
 # `version.workspace = true`, so the window title, CLI `--version` and crate
 # manifests stay in sync from this one line.
 [workspace.package]
-version = "0.1.18"
+version = "0.1.19"
 
 [package]
 name = "surfacewatch"
