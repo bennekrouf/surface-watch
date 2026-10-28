@@ -2,6 +2,7 @@
 //! this computer, and where to paste a licence number. The limit itself lives in the
 //! core (`licence::engagement_limit`), so the CLI keeps it too.
 
+use desktop_kit::ui::{ProBadge, ProLook};
 use dioxus::prelude::*;
 use surfacewatch_core::licence::{self, FreeError, Status, FREE_ENGAGEMENTS};
 
@@ -39,33 +40,17 @@ const ESCAPE_JS: &str =
 pub fn ProButton() -> Element {
     let mut pro = use_context::<Pro>();
     let status = pro.status.read().clone();
-    let (label, class, title) = match &status {
-        Status::Pro(a) => (
-            "✦ PRO",
-            "pro-btn active",
-            format!("SurfaceWatch Pro, {} plan for {}", a.plan.name, a.email),
-        ),
-        Status::NotPro(a) if a.is_free() => (
-            "Get Pro…",
-            "pro-btn",
-            format!(
+    let title = match &status {
+        Status::Pro(a) => format!("SurfaceWatch Pro, {} plan for {}", a.plan.name, a.email),
+        Status::NotPro(a) if a.is_free() => format!(
                 "Free: {} AI credits left this month. The free version keeps {FREE_ENGAGEMENTS} engagement; Pro keeps any number",
                 a.credits.left
             ),
-        ),
-        Status::NotPro(_) | Status::Offline(_) | Status::Unknown(_) => (
-            "✦ RENEW PRO",
-            "pro-btn renew",
-            "Your licence doesn't make this SurfaceWatch Pro right now".to_owned(),
-        ),
-        Status::Free => (
-            "Get Pro…",
-            "pro-btn",
-            format!("The free version keeps {FREE_ENGAGEMENTS} engagement; Pro keeps any number"),
-        ),
+        Status::NotPro(_) | Status::Offline(_) | Status::Unknown(_) => "Your licence doesn't make this SurfaceWatch Pro right now".to_owned(),
+        Status::Free => format!("The free version keeps {FREE_ENGAGEMENTS} engagement; Pro keeps any number"),
     };
     rsx! {
-        button { class, title, onclick: move |_| pro.open.set(true), "{label}" }
+        ProBadge { look: ProLook::of(&status), title, onclick: move |_| pro.open.set(true) }
     }
 }
 

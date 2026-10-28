@@ -7,6 +7,17 @@ surface monitor for web pentest engagements, and of its command-line edition,
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- The bar across the top of the window now looks and works the same in every
+  mayorana app: the name and version on the left, and on the right Feedback, the
+  light/dark switch and the Pro badge in the corner.
+- The name, version, Feedback and Pro moved there from the top of the
+  engagements list, and the light/dark switch is part of the bar instead of
+  floating over it.
+
 ## [0.1.18] - 2026-10-28
 
 ### Changed

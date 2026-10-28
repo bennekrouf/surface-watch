@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 use surfacewatch_core::{licence, model::Engagement, store};
 
-use crate::components::pro::{Pro, ProButton};
+use crate::components::pro::Pro;
 
 /// The selected target, as `(engagement id, target id)`.
 pub type Selection = Option<(String, String)>;
@@ -21,21 +21,6 @@ pub fn EngagementList(
 
     rsx! {
         aside { class: "side",
-            div { class: "brand",
-                span { class: "brand-name", "SurfaceWatch" }
-                span { class: "brand-version", title: "Installed version",
-                    {concat!("v", env!("CARGO_PKG_VERSION"))}
-                }
-                // A link, not a button: the webview hands it to the browser.
-                a {
-                    class: "feedback-link",
-                    href: "{crate::feedback::contact_url()}",
-                    target: "_blank",
-                    title: "Ideas, bugs, questions: send them to the person who makes SurfaceWatch",
-                    "Feedback"
-                }
-                ProButton {}
-            }
             div { class: "grp row-between",
                 span { "Engagements" }
                 button {

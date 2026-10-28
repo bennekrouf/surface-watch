@@ -1,10 +1,9 @@
 mod components;
-mod feedback;
 mod kit;
 mod screens;
-mod theme;
 mod update_check;
 
+use desktop_kit::ui::{use_theme, Header};
 use dioxus::desktop::LogicalSize;
 use dioxus::prelude::*;
 use screens::main_screen::MainScreen;
@@ -105,11 +104,12 @@ fn App() -> Element {
         }
     });
 
+    let theme = use_theme();
     rsx! {
         style { {MAIN_CSS} }
-        theme::ThemeToggle {}
         components::pro::ProWindow {}
         div { class: "shell",
+            Header { theme, pro: rsx! { components::pro::ProButton {} } }
             if let (Some(info), false) = (update(), dismissed()) {
                 div { class: "update-banner", role: "status",
                     span { class: "update-banner-text",
