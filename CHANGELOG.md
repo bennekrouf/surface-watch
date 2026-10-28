@@ -7,6 +7,18 @@ surface monitor for web pentest engagements, and of its command-line edition,
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **Use from Claude**: SurfaceWatch can now be connected to Claude Desktop,
+  Claude Code, Codex or any other MCP app, from the button at the top right.
+  Ask about your engagements: what changed between two builds, which endpoints
+  are flagged, which findings are still open, and the evidence behind them.
+  Claude only reads: captures, retests and findings are still made in the app.
+  On a machine with only the command line, `surfacewatch-cli mcp` serves the
+  same tools.
+
 ## [0.1.20] - 2026-10-28
 
 ### Added

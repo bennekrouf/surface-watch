@@ -1,6 +1,7 @@
 mod components;
 mod screens;
 
+use components::mcp::{McpOpen, McpWindow};
 use desktop_kit::ui::{use_pro, use_theme, Banners, Header, ProButton, ProWindow};
 use dioxus::desktop::LogicalSize;
 use dioxus::prelude::*;
@@ -31,6 +32,11 @@ fn main() {
     // does not inherit the terminal's PATH, so `node` and `rea` read as
     // "not found".
     surfacewatch_core::env::adopt_login_path();
+    // `surfacewatch mcp`: the engagements over stdio for an MCP client, and
+    // no window. After the login PATH, which `readiness` needs to find node.
+    if std::env::args().nth(1).as_deref() == Some("mcp") {
+        return surfacewatch_core::mcp::serve();
+    }
 
     let cfg = dioxus::desktop::Config::new()
         .with_data_directory(webview_data_dir())
@@ -77,13 +83,19 @@ fn App() -> Element {
     });
 
     let theme = use_theme();
+    let mut mcp_open = use_context_provider(|| McpOpen(Signal::new(false))).0;
     rsx! {
         style { {MAIN_CSS} }
         ProWindow { pro, pitch: components::pro::pitch() }
         Banners {}
         div { class: "shell",
-            Header { theme, pro: rsx! { ProButton { pro, hint: components::pro::hint() } } }
+            Header {
+                theme,
+                on_mcp: move |_| mcp_open.set(true),
+                pro: rsx! { ProButton { pro, hint: components::pro::hint() } },
+            }
             MainScreen {}
         }
+        McpWindow {}
     }
 }

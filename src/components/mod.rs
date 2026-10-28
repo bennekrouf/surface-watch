@@ -2,6 +2,7 @@ pub mod captures_panel;
 pub mod engagement_form;
 pub mod engagement_list;
 pub mod findings_panel;
+pub mod mcp;
 pub mod os;
 pub mod placeholder_panel;
 pub mod pro;
