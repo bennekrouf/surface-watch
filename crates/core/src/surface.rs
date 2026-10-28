@@ -164,6 +164,8 @@ fn security_headers(names: &[String]) -> impl Iterator<Item = String> + '_ {
 /// `/rest/track-order/5267` → `/rest/track-order/:id`, query and fragment
 /// dropped, and a build hash before `.js` collapsed so
 /// `/chunk-DAJ4olp_.js` and `/chunk-1qQQGal7.js` are the same script.
+// The patterns are constants: a mistake in one fails the tests, not a user's run.
+#[allow(clippy::unwrap_used)]
 pub fn normalize_path(path: &str) -> String {
     static RES: OnceLock<[Regex; 3]> = OnceLock::new();
     let [num, hex, hash] = RES.get_or_init(|| {

@@ -31,8 +31,8 @@ Do not run `dx fmt`: it has dropped `else` branches from `if … else` inside
 
 
 The compiler is pinned in `rust-toolchain.toml` (rustup installs it on first
-use) and in the workflows' `dtolnay/rust-toolchain@<version>` lines: bump both
-together.
+use); the workflows install that version with `rustup toolchain install`. Bump
+it in every desktop app at once.
 
 ```bash
 cargo fmt --all --check

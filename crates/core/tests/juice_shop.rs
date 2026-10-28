@@ -6,7 +6,8 @@
 //! the fields the surface reads. REA's own comparison reports these
 //! captures as "changed" even between the two v20.3.0 runs; the
 //! expectations below are the changes that are actually in the code.
-
+// A test or an example may panic: that is a failed run, not a crash anyone sees.
+#![allow(clippy::unwrap_used, clippy::expect_used)]
 use std::path::{Path, PathBuf};
 use surfacewatch_core::{
     capture,

@@ -6,6 +6,8 @@ license-file = "../../LICENSE"
 description = "Shared services (REA runner, surface model, diff engine, store) for SurfaceWatch frontends"
 
 [dependencies]
+# The licence rule every mayorana desktop app shares (see src/licence.rs).
+desktop-kit = { path = "../../../desktop-kit" }
 # Checks the SurfaceWatch Pro licence with api0 (see src/licence.rs).
 # Blocking, for the CLI; the app calls it off its UI thread.
 reqwest = { version = "0.12", features = ["blocking", "json"] }
@@ -15,3 +17,6 @@ regex = "1"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 sha2 = "0.10"
+
+[lints]
+workspace = true
