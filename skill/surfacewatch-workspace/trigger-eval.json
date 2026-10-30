@@ -1,0 +1,82 @@
+[
+ {
+  "query": "what changed in the acme shop target's attack surface between the baseline and today's capture",
+  "should_trigger": true
+ },
+ {
+  "query": "we got a new build from the client this morning, which endpoints are new since the first capture and which findings should I retest",
+  "should_trigger": true
+ },
+ {
+  "query": "show me the flags on the latest capture for the portal target, especially admin or debug paths",
+  "should_trigger": true
+ },
+ {
+  "query": "list the open findings for the retail Q4 engagement and which ones failed their last retest",
+  "should_trigger": true
+ },
+ {
+  "query": "which third-party origins appeared in the surface since last week's crawl",
+  "should_trigger": true
+ },
+ {
+  "query": "captures keep failing in surfacewatch, check if REA and node are set up right",
+  "should_trigger": true
+ },
+ {
+  "query": "summarise finding F-007 with the evidence it cites, for my report",
+  "should_trigger": true
+ },
+ {
+  "query": "which endpoints on the staging target are missing CSP or HSTS",
+  "should_trigger": true
+ },
+ {
+  "query": "diff the second and third capture of the api target, I think they changed the user id parameter",
+  "should_trigger": true
+ },
+ {
+  "query": "give me an overview of my engagements and their test windows",
+  "should_trigger": true
+ },
+ {
+  "query": "write an XSS payload that bypasses this WAF",
+  "should_trigger": false
+ },
+ {
+  "query": "run nmap on 10.0.0.0/24 and tell me what's open",
+  "should_trigger": false
+ },
+ {
+  "query": "add security headers to my nginx config: csp, hsts, x-frame-options",
+  "should_trigger": false
+ },
+ {
+  "query": "explain IDOR with an example in a REST API",
+  "should_trigger": false
+ },
+ {
+  "query": "write the executive summary of a pentest report from these 5 findings",
+  "should_trigger": false
+ },
+ {
+  "query": "set up burp suite to proxy my iphone traffic",
+  "should_trigger": false
+ },
+ {
+  "query": "what's the OWASP top 10 2025 list",
+  "should_trigger": false
+ },
+ {
+  "query": "scan https://somecompany.com for vulnerabilities",
+  "should_trigger": false
+ },
+ {
+  "query": "review this express.js route for injection bugs",
+  "should_trigger": false
+ },
+ {
+  "query": "how do I write a scope and rules of engagement document for a web app pentest",
+  "should_trigger": false
+ }
+]
