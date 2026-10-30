@@ -1,0 +1,171 @@
+{
+  "skill_name": "surfacewatch",
+  "description": "How to read an authorised web pentest engagement in SurfaceWatch, the local console that captures web apps' client-side attack surface (endpoints, parameters, statuses, security headers, scripts, third-party origins) and compares captures between builds. Read this skill before calling any surfacewatch tool (overview, list_captures, get_surface, diff, list_findings, get_finding, readiness), because it has the scope rules, how to treat flags and recorded data, and how to lay out a surface diff or finding summary. Use it whenever the user mentions SurfaceWatch, an engagement, target, capture, baseline or finding ID (F-001), or asks what changed in a target's surface between builds, which endpoints or third-party origins are new, which security headers are missing, what a capture flagged, which findings to retest, or why captures fail.",
+  "results": [
+    {
+      "query": "what changed in the acme shop target's attack surface between the baseline and today's capture",
+      "should_trigger": true,
+      "trigger_rate": 0.6666666666666666,
+      "triggers": 2,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "we got a new build from the client this morning, which endpoints are new since the first capture and which findings should I retest",
+      "should_trigger": true,
+      "trigger_rate": 0.6666666666666666,
+      "triggers": 2,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "show me the flags on the latest capture for the portal target, especially admin or debug paths",
+      "should_trigger": true,
+      "trigger_rate": 0.6666666666666666,
+      "triggers": 2,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "list the open findings for the retail Q4 engagement and which ones failed their last retest",
+      "should_trigger": true,
+      "trigger_rate": 0.3333333333333333,
+      "triggers": 1,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "which third-party origins appeared in the surface since last week's crawl",
+      "should_trigger": true,
+      "trigger_rate": 0.3333333333333333,
+      "triggers": 1,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "captures keep failing in surfacewatch, check if REA and node are set up right",
+      "should_trigger": true,
+      "trigger_rate": 0.3333333333333333,
+      "triggers": 1,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "summarise finding F-007 with the evidence it cites, for my report",
+      "should_trigger": true,
+      "trigger_rate": 0.3333333333333333,
+      "triggers": 1,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "which endpoints on the staging target are missing CSP or HSTS",
+      "should_trigger": true,
+      "trigger_rate": 0.6666666666666666,
+      "triggers": 2,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "diff the second and third capture of the api target, I think they changed the user id parameter",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "give me an overview of my engagements and their test windows",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "write an XSS payload that bypasses this WAF",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "run nmap on 10.0.0.0/24 and tell me what's open",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "add security headers to my nginx config: csp, hsts, x-frame-options",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "explain IDOR with an example in a REST API",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "write the executive summary of a pentest report from these 5 findings",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "set up burp suite to proxy my iphone traffic",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "what's the OWASP top 10 2025 list",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "scan https://somecompany.com for vulnerabilities",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "review this express.js route for injection bugs",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "how do I write a scope and rules of engagement document for a web app pentest",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 20,
+    "passed": 14,
+    "failed": 6
+  }
+}
