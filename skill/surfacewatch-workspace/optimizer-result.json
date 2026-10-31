@@ -1,0 +1,840 @@
+{
+  "exit_reason": "max_iterations (3)",
+  "original_description": "How to read an authorised web pentest engagement in SurfaceWatch, the local console that captures web apps' client-side attack surface (endpoints, parameters, statuses, security headers, scripts, third-party origins) and compares captures between builds. Read this skill before calling any surfacewatch tool (overview, list_captures, get_surface, diff, list_findings, get_finding, readiness), because it has the scope rules, how to treat flags and recorded data, and how to lay out a surface diff or finding summary. Use it whenever the user mentions SurfaceWatch, an engagement, target, capture, baseline or finding ID (F-001), or asks what changed in a target's surface between builds, which endpoints or third-party origins are new, which security headers are missing, what a capture flagged, which findings to retest, or why captures fail.",
+  "best_description": "SurfaceWatch skill: read it first, before ToolSearch or any mcp__surfacewatch__ tool, even when the tools look enough on their own. The server's instructions leave out the scope and test-window rules, how to handle recorded data and flags, and the report layout for diffs and findings. Use it for any request that reads the user's own pentest records, whether or not SurfaceWatch is named: listing engagements, test windows or targets; comparing a new client build or today's capture with the baseline or an earlier crawl (new or removed endpoints, parameters, statuses, headers, scripts, third-party origins); deciding which findings to retest; summarising a finding (F-001) and its evidence for a report; and fixing failed captures or checking REA, Node.js or Chromium setup. Skip it for scanning or exploiting a live host, code review, payloads, and general pentest knowledge or documents. SurfaceWatch only reads captures that were already recorded.",
+  "best_score": "6/8",
+  "best_train_score": "7/12",
+  "best_test_score": "6/8",
+  "final_description": "SurfaceWatch skill: read it first, before ToolSearch or any mcp__surfacewatch__ tool, even when the tools look enough on their own. The server's instructions leave out the scope and test-window rules, how to handle recorded data and flags, and the report layout for diffs and findings. Use it for any request that reads the user's own pentest records, whether or not SurfaceWatch is named: listing engagements, test windows or targets; comparing a new client build or today's capture with the baseline or an earlier crawl (new or removed endpoints, parameters, statuses, headers, scripts, third-party origins); deciding which findings to retest; summarising a finding (F-001) and its evidence for a report; and fixing failed captures or checking REA, Node.js or Chromium setup. Skip it for scanning or exploiting a live host, code review, payloads, and general pentest knowledge or documents. SurfaceWatch only reads captures that were already recorded.",
+  "iterations_run": 3,
+  "holdout": 0.4,
+  "train_size": 12,
+  "test_size": 8,
+  "history": [
+    {
+      "iteration": 1,
+      "description": "How to read an authorised web pentest engagement in SurfaceWatch, the local console that captures web apps' client-side attack surface (endpoints, parameters, statuses, security headers, scripts, third-party origins) and compares captures between builds. Read this skill before calling any surfacewatch tool (overview, list_captures, get_surface, diff, list_findings, get_finding, readiness), because it has the scope rules, how to treat flags and recorded data, and how to lay out a surface diff or finding summary. Use it whenever the user mentions SurfaceWatch, an engagement, target, capture, baseline or finding ID (F-001), or asks what changed in a target's surface between builds, which endpoints or third-party origins are new, which security headers are missing, what a capture flagged, which findings to retest, or why captures fail.",
+      "train_passed": 5,
+      "train_failed": 7,
+      "train_total": 12,
+      "train_results": [
+        {
+          "query": "captures keep failing in surfacewatch, check if REA and node are set up right",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "summarise finding F-007 with the evidence it cites, for my report",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "give me an overview of my engagements and their test windows",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "which third-party origins appeared in the surface since last week's crawl",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "what changed in the acme shop target's attack surface between the baseline and today's capture",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "we got a new build from the client this morning, which endpoints are new since the first capture and which findings should I retest",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "run nmap on 10.0.0.0/24 and tell me what's open",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "review this express.js route for injection bugs",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "scan https://somecompany.com for vulnerabilities",
+          "should_trigger": false,
+          "trigger_rate": 0.6666666666666666,
+          "triggers": 2,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "write an XSS payload that bypasses this WAF",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "what's the OWASP top 10 2025 list",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "how do I write a scope and rules of engagement document for a web app pentest",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ],
+      "test_passed": 5,
+      "test_failed": 3,
+      "test_total": 8,
+      "test_results": [
+        {
+          "query": "which endpoints on the staging target are missing CSP or HSTS",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "list the open findings for the retail Q4 engagement and which ones failed their last retest",
+          "should_trigger": true,
+          "trigger_rate": 0.6666666666666666,
+          "triggers": 2,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "show me the flags on the latest capture for the portal target, especially admin or debug paths",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "diff the second and third capture of the api target, I think they changed the user id parameter",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "explain IDOR with an example in a REST API",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "set up burp suite to proxy my iphone traffic",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "add security headers to my nginx config: csp, hsts, x-frame-options",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "write the executive summary of a pentest report from these 5 findings",
+          "should_trigger": false,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": true
+        }
+      ],
+      "passed": 5,
+      "failed": 7,
+      "total": 12,
+      "results": [
+        {
+          "query": "captures keep failing in surfacewatch, check if REA and node are set up right",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "summarise finding F-007 with the evidence it cites, for my report",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "give me an overview of my engagements and their test windows",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "which third-party origins appeared in the surface since last week's crawl",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "what changed in the acme shop target's attack surface between the baseline and today's capture",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "we got a new build from the client this morning, which endpoints are new since the first capture and which findings should I retest",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "run nmap on 10.0.0.0/24 and tell me what's open",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "review this express.js route for injection bugs",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "scan https://somecompany.com for vulnerabilities",
+          "should_trigger": false,
+          "trigger_rate": 0.6666666666666666,
+          "triggers": 2,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "write an XSS payload that bypasses this WAF",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "what's the OWASP top 10 2025 list",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "how do I write a scope and rules of engagement document for a web app pentest",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "iteration": 2,
+      "description": "Use this skill whenever a question can be answered from the user's own pentest engagement data, even if they don't name SurfaceWatch (the local pentest console). This covers engagements and their test windows, targets, captures or crawls and the baseline, a target's attack surface (endpoints, parameters, statuses, security headers, scripts, third-party origins), what changed after a new build or since an earlier capture, and findings (F-007) with their evidence and retests. It also covers captures that fail, or REA, Node or Chromium setup. Load it before the first mcp__surfacewatch__ call (overview, diff, get_surface, list_findings, get_finding, readiness). It has the scope rules and the report layout that the tools leave out. Don't use it to scan, crawl or exploit a live URL, or for general security questions, because SurfaceWatch only reads captures that were already recorded.",
+      "train_passed": 7,
+      "train_failed": 5,
+      "train_total": 12,
+      "train_results": [
+        {
+          "query": "captures keep failing in surfacewatch, check if REA and node are set up right",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "summarise finding F-007 with the evidence it cites, for my report",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "give me an overview of my engagements and their test windows",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "which third-party origins appeared in the surface since last week's crawl",
+          "should_trigger": true,
+          "trigger_rate": 0.6666666666666666,
+          "triggers": 2,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "what changed in the acme shop target's attack surface between the baseline and today's capture",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "we got a new build from the client this morning, which endpoints are new since the first capture and which findings should I retest",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "run nmap on 10.0.0.0/24 and tell me what's open",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "review this express.js route for injection bugs",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "scan https://somecompany.com for vulnerabilities",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "write an XSS payload that bypasses this WAF",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "what's the OWASP top 10 2025 list",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "how do I write a scope and rules of engagement document for a web app pentest",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ],
+      "test_passed": 4,
+      "test_failed": 4,
+      "test_total": 8,
+      "test_results": [
+        {
+          "query": "which endpoints on the staging target are missing CSP or HSTS",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "list the open findings for the retail Q4 engagement and which ones failed their last retest",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "show me the flags on the latest capture for the portal target, especially admin or debug paths",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "diff the second and third capture of the api target, I think they changed the user id parameter",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "explain IDOR with an example in a REST API",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "set up burp suite to proxy my iphone traffic",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "add security headers to my nginx config: csp, hsts, x-frame-options",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "write the executive summary of a pentest report from these 5 findings",
+          "should_trigger": false,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": true
+        }
+      ],
+      "passed": 7,
+      "failed": 5,
+      "total": 12,
+      "results": [
+        {
+          "query": "captures keep failing in surfacewatch, check if REA and node are set up right",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "summarise finding F-007 with the evidence it cites, for my report",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "give me an overview of my engagements and their test windows",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "which third-party origins appeared in the surface since last week's crawl",
+          "should_trigger": true,
+          "trigger_rate": 0.6666666666666666,
+          "triggers": 2,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "what changed in the acme shop target's attack surface between the baseline and today's capture",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "we got a new build from the client this morning, which endpoints are new since the first capture and which findings should I retest",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "run nmap on 10.0.0.0/24 and tell me what's open",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "review this express.js route for injection bugs",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "scan https://somecompany.com for vulnerabilities",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "write an XSS payload that bypasses this WAF",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "what's the OWASP top 10 2025 list",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "how do I write a scope and rules of engagement document for a web app pentest",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "iteration": 3,
+      "description": "SurfaceWatch skill: read it first, before ToolSearch or any mcp__surfacewatch__ tool, even when the tools look enough on their own. The server's instructions leave out the scope and test-window rules, how to handle recorded data and flags, and the report layout for diffs and findings. Use it for any request that reads the user's own pentest records, whether or not SurfaceWatch is named: listing engagements, test windows or targets; comparing a new client build or today's capture with the baseline or an earlier crawl (new or removed endpoints, parameters, statuses, headers, scripts, third-party origins); deciding which findings to retest; summarising a finding (F-001) and its evidence for a report; and fixing failed captures or checking REA, Node.js or Chromium setup. Skip it for scanning or exploiting a live host, code review, payloads, and general pentest knowledge or documents. SurfaceWatch only reads captures that were already recorded.",
+      "train_passed": 7,
+      "train_failed": 5,
+      "train_total": 12,
+      "train_results": [
+        {
+          "query": "captures keep failing in surfacewatch, check if REA and node are set up right",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "summarise finding F-007 with the evidence it cites, for my report",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "give me an overview of my engagements and their test windows",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "which third-party origins appeared in the surface since last week's crawl",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "what changed in the acme shop target's attack surface between the baseline and today's capture",
+          "should_trigger": true,
+          "trigger_rate": 0.6666666666666666,
+          "triggers": 2,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "we got a new build from the client this morning, which endpoints are new since the first capture and which findings should I retest",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "run nmap on 10.0.0.0/24 and tell me what's open",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "review this express.js route for injection bugs",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "scan https://somecompany.com for vulnerabilities",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "write an XSS payload that bypasses this WAF",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "what's the OWASP top 10 2025 list",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "how do I write a scope and rules of engagement document for a web app pentest",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ],
+      "test_passed": 6,
+      "test_failed": 2,
+      "test_total": 8,
+      "test_results": [
+        {
+          "query": "which endpoints on the staging target are missing CSP or HSTS",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "list the open findings for the retail Q4 engagement and which ones failed their last retest",
+          "should_trigger": true,
+          "trigger_rate": 0.6666666666666666,
+          "triggers": 2,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "show me the flags on the latest capture for the portal target, especially admin or debug paths",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "diff the second and third capture of the api target, I think they changed the user id parameter",
+          "should_trigger": true,
+          "trigger_rate": 0.6666666666666666,
+          "triggers": 2,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "explain IDOR with an example in a REST API",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "set up burp suite to proxy my iphone traffic",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "add security headers to my nginx config: csp, hsts, x-frame-options",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "write the executive summary of a pentest report from these 5 findings",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ],
+      "passed": 7,
+      "failed": 5,
+      "total": 12,
+      "results": [
+        {
+          "query": "captures keep failing in surfacewatch, check if REA and node are set up right",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "summarise finding F-007 with the evidence it cites, for my report",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "give me an overview of my engagements and their test windows",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "which third-party origins appeared in the surface since last week's crawl",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "what changed in the acme shop target's attack surface between the baseline and today's capture",
+          "should_trigger": true,
+          "trigger_rate": 0.6666666666666666,
+          "triggers": 2,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "we got a new build from the client this morning, which endpoints are new since the first capture and which findings should I retest",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "run nmap on 10.0.0.0/24 and tell me what's open",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "review this express.js route for injection bugs",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "scan https://somecompany.com for vulnerabilities",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "write an XSS payload that bypasses this WAF",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "what's the OWASP top 10 2025 list",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "how do I write a scope and rules of engagement document for a web app pentest",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ]
+    }
+  ]
+}
