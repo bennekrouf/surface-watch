@@ -7,6 +7,13 @@ surface monitor for web pentest engagements, and of its command-line edition,
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Added the results of the fourth iteration of trigger testing for the
+  SurfaceWatch skill, including queries, trigger rates, and pass/fail statuses.
+
 ## [0.1.23] - 2026-10-30
 
 ### Changed
