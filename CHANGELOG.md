@@ -7,6 +7,15 @@ surface monitor for web pentest engagements, and of its command-line edition,
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Using SurfaceWatch from Claude, Codex or another agent takes less of the
+  agent's context on every message, including ones that have nothing to do with
+  SurfaceWatch: its instructions are a few lines, and what a setting every tool
+  takes means is said once rather than in each tool.
+
 ## [0.1.26] - 2026-10-31
 
 ### Changed
