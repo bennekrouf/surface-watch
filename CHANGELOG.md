@@ -7,16 +7,22 @@ surface monitor for web pentest engagements, and of its command-line edition,
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.1.28] - 2026-11-01
+## [Unreleased]
 
 ### Added
 
 - Install & restart, on the banner that says a new version is out: one click
-  downloads it, checks it, puts it in place of the version you have and opens
-  it again, on macOS, Windows and Linux. No disk image to open, drag and throw
-  away, no setup to click through. If an update can't finish, SurfaceWatch says why
-  the next time it opens. Where it can't replace itself (an app in a folder you
-  can't change), the banner offers the download instead.
+  downloads it, checks it, puts it in place of the version you have and opens it
+  again, on macOS, Windows and Linux. No disk image to open, drag and throw
+  away, no setup to click through. If an update can't finish, SurfaceWatch says
+  why the next time it opens. Where it can't replace itself (an app in a folder
+  you can't change), the banner offers the download instead.
+
+## [0.1.28] - 2026-11-01
+
+### Changed
+
+- Build and packaging only — no user-visible change.
 
 ## [0.1.27] - 2026-11-01
 
