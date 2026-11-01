@@ -4887,7 +4887,7 @@ checksum = "13c2bddecc57b384dee18652358fb23172facb8a2c51ccc10d74c157bdea3292"
 
 [[package]]
 name = "surfacewatch"
-version = "0.1.30"
+version = "0.1.31"
 dependencies = [
  "arboard",
  "chrono",
@@ -4905,7 +4905,7 @@ dependencies = [
 
 [[package]]
 name = "surfacewatch-cli"
-version = "0.1.30"
+version = "0.1.31"
 dependencies = [
  "chrono",
  "serde_json",
@@ -4914,7 +4914,7 @@ dependencies = [
 
 [[package]]
 name = "surfacewatch-core"
-version = "0.1.30"
+version = "0.1.31"
 dependencies = [
  "chrono",
  "desktop-kit",
