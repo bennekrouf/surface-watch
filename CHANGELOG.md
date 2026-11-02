@@ -7,6 +7,14 @@ surface monitor for web pentest engagements, and of its command-line edition,
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- The "Use SurfaceWatch from Claude or Codex" window now looks and reads the
+  same as in the other Mayorana apps, with a copy button on every step, and
+  Escape closes it.
+
 ## [0.1.32] - 2026-11-02
 
 ### Changed
