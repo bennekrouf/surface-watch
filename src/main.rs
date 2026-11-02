@@ -2,7 +2,7 @@ mod components;
 mod screens;
 
 use components::mcp::{McpOpen, McpWindow};
-use desktop_kit::ui::{use_pro, use_theme, Banners, Header, ProButton, ProWindow};
+use desktop_kit::ui::{use_pro, use_theme, Banners, Header, ProButton, ProWindow, SettingsWindow};
 use dioxus::desktop::LogicalSize;
 use dioxus::prelude::*;
 use screens::main_screen::MainScreen;
@@ -83,6 +83,7 @@ fn App() -> Element {
     });
 
     let theme = use_theme();
+    let mut settings_open = use_signal(|| false);
     let mut mcp_open = use_context_provider(|| McpOpen(Signal::new(false))).0;
     rsx! {
         style { {MAIN_CSS} }
@@ -90,12 +91,15 @@ fn App() -> Element {
         Banners {}
         div { class: "shell",
             Header {
-                theme,
+                on_settings: move |_| settings_open.set(true),
                 on_mcp: move |_| mcp_open.set(true),
                 pro: rsx! { ProButton { pro, hint: components::pro::hint() } },
             }
             MainScreen {}
         }
         McpWindow {}
+        if settings_open() {
+            SettingsWindow { theme, on_close: move |_| settings_open.set(false) }
+        }
     }
 }
