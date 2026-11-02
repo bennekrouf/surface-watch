@@ -21,8 +21,6 @@ on:
 permissions:
   contents: write
 
-env:
-
 jobs:
   prepare:
     if: github.event_name == 'workflow_dispatch'
