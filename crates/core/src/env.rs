@@ -34,7 +34,7 @@ const FALLBACKS: &[&str] = &[
 /// Call once, before anything runs a subprocess.
 pub fn adopt_login_path() {
     let current = std::env::var("PATH").unwrap_or_default();
-    let login = login_shell_path();
+    let login = desktop_kit::shell::login_path();
     let cargo_bin = dirs::home_dir().map(|h| h.join(".cargo/bin").to_string_lossy().to_string());
 
     let mut extras: Vec<String> = FALLBACKS.iter().map(|s| s.to_string()).collect();
@@ -50,86 +50,7 @@ pub fn adopt_login_path() {
 /// then the fallbacks. Order is preserved and duplicates are dropped, so the
 /// first place a tool is found stays the one that wins.
 pub fn merge_paths(current: &str, login: Option<&str>, extras: &[String]) -> String {
-    let mut seen = std::collections::HashSet::new();
-    let mut out: Vec<String> = vec![];
-
-    let sources = [
-        login.unwrap_or_default().to_string(),
-        current.to_string(),
-        extras.join(":"),
-    ];
-
-    for source in sources {
-        for entry in source.split(':') {
-            let entry = entry.trim();
-            if entry.is_empty() {
-                continue;
-            }
-            if seen.insert(entry.to_string()) {
-                out.push(entry.to_string());
-            }
-        }
-    }
-    out.join(":")
-}
-
-#[cfg(unix)]
-/// How long the profile gets to answer before we give up and use
-/// [`FALLBACKS`]. Long enough for a slow-but-working profile, short enough
-/// that a hung one is a brief pause rather than an app that never opens.
-const PROBE_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(3);
-
-#[cfg(unix)]
-fn login_shell_path() -> Option<String> {
-    use std::io::Read;
-    use std::process::{Command, Stdio};
-
-    let shell = std::env::var("SHELL").unwrap_or_else(|_| "/bin/zsh".into());
-    let mut child = Command::new(&shell)
-        // -l reads the profile (where `brew shellenv` normally is); no -i, so
-        // there is no prompt to answer.
-        .args(["-lc", "printf '%s' \"$PATH\""])
-        .stdin(Stdio::null())
-        .stdout(Stdio::piped())
-        .stderr(Stdio::null())
-        .spawn()
-        .ok()?;
-
-    let mut stdout = child.stdout.take();
-    let reader = std::thread::spawn(move || {
-        let mut buf = String::new();
-        if let Some(p) = stdout.as_mut() {
-            let _ = p.read_to_string(&mut buf);
-        }
-        buf
-    });
-
-    let deadline = std::time::Instant::now() + PROBE_TIMEOUT;
-    let finished = loop {
-        match child.try_wait() {
-            Ok(Some(status)) => break status.success(),
-            Err(_) => break false,
-            Ok(None) if std::time::Instant::now() >= deadline => {
-                // Kill and reap — a dropped `Child` is never waited on, and
-                // the hung shell would linger as a zombie for the session.
-                let _ = child.kill();
-                let _ = child.wait();
-                break false;
-            }
-            Ok(None) => std::thread::sleep(std::time::Duration::from_millis(20)),
-        }
-    };
-
-    let text = reader.join().unwrap_or_default().trim().to_string();
-    if !finished || text.is_empty() {
-        return None;
-    }
-    Some(text)
-}
-
-#[cfg(not(unix))]
-fn login_shell_path() -> Option<String> {
-    None
+    desktop_kit::shell::merge_paths(&[login.unwrap_or_default(), current, &extras.join(":")])
 }
 
 #[cfg(test)]
@@ -186,14 +107,5 @@ mod tests {
     fn nothing_at_all_still_yields_a_usable_path() {
         let merged = merge_paths("", None, &extras());
         assert!(merged.split(':').any(|p| p == "/usr/bin"));
-    }
-
-    /// Not an assertion about this machine — just proof the probe returns
-    /// something shaped like a PATH when a shell is available.
-    #[test]
-    fn the_login_shell_probe_returns_a_path_or_nothing() {
-        if let Some(path) = login_shell_path() {
-            assert!(path.contains('/'), "got {path}");
-        }
     }
 }
