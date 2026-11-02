@@ -8,6 +8,8 @@ use surfacewatch_core::{
     watch,
 };
 
+mod actions;
+
 #[derive(Clone, PartialEq)]
 enum Run {
     Idle,
@@ -28,14 +30,14 @@ pub fn WatchPanel(
     on_changed: EventHandler<()>,
 ) -> Element {
     let dir = watch::target_dir(&engagement.id, &target.id);
-    let mut refresh = use_signal(|| 0u32);
+    let refresh = use_signal(|| 0u32);
     let mut before = use_signal(|| Option::<String>::None);
     let mut after = use_signal(|| Option::<String>::None);
     let mut run = use_signal(|| Run::Idle);
     let mut twice = use_signal(|| true);
     let mut suggesting = use_signal(|| false);
-    let mut findings_rev = use_signal(|| 0u32);
-    let mut promote_msg = use_signal(|| Option::<Result<String, String>>::None);
+    let findings_rev = use_signal(|| 0u32);
+    let promote_msg = use_signal(|| Option::<Result<String, String>>::None);
 
     // Diff items already promoted, so their button reads "Promoted".
     let promoted = use_resource({
@@ -117,40 +119,15 @@ pub fn WatchPanel(
         let engagement = engagement.clone();
         let target = target.clone();
         move |_| {
-            let (e, t, rep) = (engagement.clone(), target.clone(), twice());
-            let runs = if rep { 2 } else { 1 };
-            // Measured on Juice Shop: about 14 seconds per batch of 6 pages.
-            let minutes = (batches * runs * 15).div_ceil(60).max(1);
-            run.set(Run::Running(format!(
-                "Capturing {batches} batch{} of pages{}. This takes about {minutes} minute{}.",
-                if batches == 1 { "" } else { "es" },
-                if rep {
-                    ", twice for the stability check"
-                } else {
-                    ""
-                },
-                if minutes > 1 { "s" } else { "" },
-            )));
-            spawn(async move {
-                let res = tokio::task::spawn_blocking(move || {
-                    let c = watch::capture_target(&e, &t, None)?;
-                    if rep {
-                        watch::capture_target(&e, &t, Some(c.id.clone()))?;
-                    }
-                    Ok::<_, String>(c)
-                })
-                .await
-                .map_err(|e| e.to_string())
-                .and_then(|r| r);
-                match res {
-                    Ok(c) => {
-                        run.set(Run::Idle);
-                        after.set(Some(c.id));
-                        refresh += 1;
-                    }
-                    Err(e) => run.set(Run::Failed(e)),
-                }
-            });
+            actions::start_capture(
+                engagement.clone(),
+                target.clone(),
+                twice(),
+                batches,
+                run,
+                after,
+                refresh,
+            )
         }
     };
 
@@ -158,37 +135,7 @@ pub fn WatchPanel(
     let import_har = {
         let dir = dir.clone();
         let tid = target.id.clone();
-        move |_| {
-            let (dir, tid) = (dir.clone(), tid.clone());
-            spawn(async move {
-                let Some(file) = rfd::AsyncFileDialog::new()
-                    .set_title("Import a HAR recording")
-                    .add_filter("HAR", &["har", "json"])
-                    .pick_file()
-                    .await
-                else {
-                    return;
-                };
-                let path = file.path().to_path_buf();
-                run.set(Run::Running(format!("Importing {}…", path.display())));
-                let res = tokio::task::spawn_blocking(move || watch::import_har(&dir, &tid, &path))
-                    .await
-                    .map_err(|e| e.to_string())
-                    .and_then(|r| r);
-                match res {
-                    Ok(c) => {
-                        run.set(Run::Done(format!(
-                            "Imported {} as a capture recorded {}. Request body field names were kept; no cookie, header value, body value or query value was. The original file stays where it is.",
-                            c.label.clone().unwrap_or_default(),
-                            c.taken_at.with_timezone(&Local).format("%d %b %H:%M")
-                        )));
-                        after.set(Some(c.id));
-                        refresh += 1;
-                    }
-                    Err(e) => run.set(Run::Failed(e)),
-                }
-            });
-        }
+        move |_| actions::import_har(dir.clone(), tid.clone(), run, after, refresh)
     };
 
     let (sel_before, sel_after) = pair().unzip();
@@ -203,19 +150,7 @@ pub fn WatchPanel(
             let (Some(b), Some(a)) = (b.clone(), a.clone()) else {
                 return;
             };
-            let res = findings::update(&eid, |list| {
-                let f = findings::promote(&change, &tid, &b, &a, list);
-                let id = f.id.clone();
-                list.push(f);
-                id
-            });
-            promote_msg.set(Some(res.map(|id| {
-                format!(
-                    "{id} created from {}. Edit it in the Findings tab.",
-                    change.subject
-                )
-            })));
-            findings_rev += 1;
+            actions::promote(&eid, &tid, change, b, a, promote_msg, findings_rev);
         }
     };
     let promoted_refs = promoted.read().clone().unwrap_or_default();
