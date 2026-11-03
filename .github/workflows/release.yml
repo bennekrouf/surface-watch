@@ -816,6 +816,9 @@ jobs:
           DEST_ROOT: ${{ vars.DIST_DEST_ROOT }}
           OWNER:     ${{ github.repository_owner }}
           TAG:       ${{ needs.prepare.outputs.tag || github.ref_name }}
+          MAC_RESULT:     ${{ needs.build-mac.result }}
+          WINDOWS_RESULT: ${{ needs.build-windows.result }}
+          LINUX_RESULT:   ${{ needs.build-linux.result }}
         run: |
           set -euo pipefail
 
@@ -861,7 +864,19 @@ jobs:
           # Versioned copy first: if the latest/ sync then fails, the release
           # is still fetchable at its immutable URL.
           rsync -av --chmod=F644 -e "$SSH" release/ "$SSH_USER@$SSH_HOST:$ROOT/$TAG/"
-          rsync -av --delete --chmod=F644 -e "$SSH" release/ "$SSH_USER@$SSH_HOST:$ROOT/latest/"
+
+          # --delete only when every platform built. v0.1.36 and v0.1.37 never
+          # got a macOS runner, and --delete then erased the previous .dmg from
+          # latest/: the download link on the site went 404. A platform that did
+          # not build keeps its last published files in latest/ instead.
+          DELETE=--delete
+          for r in "mac:$MAC_RESULT" "windows:$WINDOWS_RESULT" "linux:$LINUX_RESULT"; do
+            if [ "${r#*:}" != "success" ]; then
+              echo "::warning::build-${r%%:*} was ${r#*:} — keeping its previous files in latest/."
+              DELETE=
+            fi
+          done
+          rsync -av $DELETE --chmod=F644 -e "$SSH" release/ "$SSH_USER@$SSH_HOST:$ROOT/latest/"
 
           # The app was Surface Watch, published under surface-watch/. Copies
           # installed then look for updates in surface-watch/latest/latest.json,
@@ -927,9 +942,15 @@ jobs:
           Chromium or Edge. The Readiness tab and `surfacewatch-cli readiness` check both.
           EOF
 
+          # Re-running a failed build (e.g. `gh run rerun --failed`) reaches
+          # here with the release already created: refresh its files instead.
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" --clobber release/latest.json release/releases.json
+          else
           gh release create "$TAG" \
             --latest \
             --title "surfacewatch $TAG" \
             --notes-file notes.md \
             release/latest.json \
             release/releases.json
+          fi
