@@ -89,13 +89,13 @@
     <StandardDirectory Id="ProgramFiles64Folder">
       <Directory Id="INSTALLFOLDER" Name="SurfaceWatch">
         <Component Id="App">
-          <File Id="SurfaceWatchExe" Source="..\target\release\surfacewatch.exe" KeyPath="yes" />
+          <File Id="SurfaceWatchExe" Source="target\release\surfacewatch.exe" KeyPath="yes" />
         </Component>
         <Component Id="WebView2Loader">
-          <File Source="..\target\release\WebView2Loader.dll" KeyPath="yes" />
+          <File Source="target\release\WebView2Loader.dll" KeyPath="yes" />
         </Component>
         <Component Id="AppIcon">
-          <File Id="IconFile" Source="..\assets\icon.ico" KeyPath="yes" />
+          <File Id="IconFile" Source="assets\icon.ico" KeyPath="yes" />
         </Component>
       </Directory>
     </StandardDirectory>
