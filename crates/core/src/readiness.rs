@@ -5,6 +5,7 @@
 //! the report. Known REA issues are listed with the workaround the app
 //! applies, so a user is not surprised by them.
 
+use crate::no_window::NoWindow;
 use crate::rea::{Rea, TESTED_REA_VERSION};
 use std::path::PathBuf;
 use std::process::Command;
@@ -115,7 +116,7 @@ fn missing(name: &'static str, detail: &str) -> Check {
 }
 
 pub(crate) fn version_of(program: &str, args: &[&str]) -> Option<String> {
-    let out = Command::new(program).args(args).output().ok()?;
+    let out = Command::new(program).no_window().args(args).output().ok()?;
     out.status
         .success()
         .then(|| String::from_utf8_lossy(&out.stdout).trim().to_string())

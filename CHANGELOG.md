@@ -7,6 +7,28 @@ surface monitor for web pentest engagements, and of its command-line edition,
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- SurfaceWatch is now also published as an .msi for IT departments, to deploy
+  with Intune, Group Policy or SCCM:
+  `msiexec /i surfacewatch.msi ALLUSERS=1 /qn` installs it for every user.
+  Double-clicked, it installs for you alone with no admin prompt, and it
+  replaces an install made with the setup .exe.
+- IT departments can manage SurfaceWatch on Windows with Group Policy or Intune:
+  turn off the update check, self-update or usage statistics, and set
+  the licence number for every user, under
+  `HKLM\SOFTWARE\Policies\Mayorana\SurfaceWatch`.
+
+### Fixed
+
+- On Windows, SurfaceWatch no longer opens a black command window next to its
+  own, and closing that window no longer quits the app.
+- Installing over an existing SurfaceWatch on Windows no longer gets stuck on
+  "Setup was unable to automatically close all applications". Setup now
+  closes SurfaceWatch and its helper processes itself before replacing it.
+
 ## [0.1.40] - 2026-11-06
 
 ### Changed

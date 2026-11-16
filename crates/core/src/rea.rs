@@ -6,6 +6,7 @@
 //! this app was tested against.
 
 use crate::model::CaptureProfile;
+use crate::no_window::NoWindow;
 use serde_json::{json, Value};
 use std::path::Path;
 use std::process::Command;
@@ -55,6 +56,7 @@ impl Rea {
 
     fn command(&self) -> Command {
         let mut cmd = Command::new(&self.program);
+        cmd.no_window();
         cmd.args(&self.prefix);
         cmd
     }

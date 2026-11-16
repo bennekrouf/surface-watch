@@ -1,3 +1,6 @@
+// Release builds on Windows are GUI programs: no cmd window opens beside the app.
+#![cfg_attr(all(windows, not(debug_assertions)), windows_subsystem = "windows")]
+
 mod components;
 mod screens;
 

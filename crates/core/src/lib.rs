@@ -34,6 +34,7 @@ pub mod kit;
 pub mod licence;
 pub mod mcp;
 pub mod model;
+pub mod no_window;
 pub mod rea;
 pub mod readiness;
 pub mod setup;
