@@ -11,6 +11,7 @@
 //! crawl and HAR imports observe real API calls.
 
 use crate::model::{Engagement, Target};
+use crate::no_window::NoWindow;
 use crate::rea::Rea;
 use crate::readiness;
 use crate::store;
@@ -120,6 +121,7 @@ impl ScanBrowser {
             Utc::now().timestamp_millis()
         ));
         let child = Command::new(exe)
+            .no_window()
             .args([
                 "--headless=new",
                 "--no-first-run",
