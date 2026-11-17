@@ -798,7 +798,24 @@ jobs:
           WIN_MSI="surfacewatch-setup.exe"
           LINUX_TGZ="surfacewatch-linux-x86_64.tar.gz"
 
-          sha() { [ -n "$1" ] && [ -f "release/$1" ] && sha256sum "release/$1" | awk '{print $1}' || echo ""; }
+          sha() { sha256sum "release/$1" | awk '{print $1}'; }
+
+          # A platform goes in only if its build is here. An entry without a
+          # file would send the updater to a 404, and with no checksum the
+          # app can't install it anyway; left out, that platform simply isn't
+          # offered this version until a re-run publishes it.
+          entries=()
+          add() { # os format file
+            if [ -f "release/$3" ]; then
+              entries+=("\"$1\": { \"$2\": { \"url\": \"$BASE/$3\", \"sha256\": \"$(sha "$3")\" } }")
+            else
+              echo "::warning::$3 was not built: $1 is left out of latest.json."
+            fi
+          }
+          add macos dmg "$MAC_DMG"
+          add windows exe_or_msi "$WIN_MSI"
+          add linux tarball "$LINUX_TGZ"
+          platforms=$(IFS=,; echo "${entries[*]}")
 
           cat > release/latest.json <<EOF
           {
@@ -806,13 +823,10 @@ jobs:
             "version": "$VER",
             "tag": "$TAG",
             "released_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-            "platforms": {
-              "macos":   { "dmg":    { "url": "$BASE/$MAC_DMG",   "sha256": "$(sha "$MAC_DMG")"   } },
-              "windows": { "exe_or_msi": { "url": "$BASE/$WIN_MSI", "sha256": "$(sha "$WIN_MSI")" } },
-              "linux":   { "tarball": { "url": "$BASE/$LINUX_TGZ", "sha256": "$(sha "$LINUX_TGZ")" } }
-            }
+            "platforms": { $platforms }
           }
           EOF
+          python3 -m json.tool release/latest.json > /dev/null
           cat release/latest.json
 
       # ── Release notes feed ─────────────────────────────────────────────────
