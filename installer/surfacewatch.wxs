@@ -37,7 +37,7 @@
     <Launch Condition="Installed OR WindowsBuild &gt;= 17763"
             Message="SurfaceWatch needs Windows 10 version 1809 or later." />
 
-    <Icon Id="SurfaceWatchIcon" SourceFile="..\assets\icon.ico" />
+    <Icon Id="SurfaceWatchIcon" SourceFile="assets\icon.ico" />
     <Property Id="ARPPRODUCTICON" Value="SurfaceWatchIcon" />
     <Property Id="ARPURLINFOABOUT" Value="https://mayorana.ch/en/apps/surfacewatch" />
     <Property Id="ARPHELPLINK" Value="https://github.com/Bennekrouf/surface-watch/issues" />
