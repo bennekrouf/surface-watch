@@ -26,7 +26,11 @@ The tools come from SurfaceWatch's own MCP server (`surfacewatch mcp` or
 - Tell the user SurfaceWatch is a separate app, from
   <https://mayorana.ch/en/apps/surfacewatch>, and that this skill only works
   with it installed. Do not download or install it for them.
-- `references/connect.md` has the steps per client.
+- Once it is installed, the **MCP** button at the top of its window adds its
+  server to Claude Desktop, Claude Code, Codex and VS Code, and shows where it
+  is installed and running. The user presses it: do not change their agent's
+  configuration for them. `references/connect.md` has the steps for other
+  clients.
 
 ## How to work with it
 
